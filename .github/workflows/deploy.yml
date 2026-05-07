@@ -37,15 +37,13 @@ jobs:
         run: pnpm build
         working-directory: frontend
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
+      - name: Copy dist to root
+        run: cp -r frontend/dist/* ./
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend/dist
+          path: ./dist
 
       - name: Deploy to GitHub Pages
         id: deployment
