@@ -3,7 +3,11 @@
 ## 约束
 
 - **中文交流** — 所有沟通使用中文
-- **禁止 push 到远端仓库** — 不得将本地代码推送到远程仓库
+
+## GitHub 仓库
+
+- **仓库地址**: https://github.com/Benaso/vitcor-s-box
+- **部署方式**: GitHub Pages (通过 Actions 自动部署)
 
 ## 设计理念
 
@@ -41,9 +45,14 @@
 ### 技术栈
 
 - **前端**: React + Vite
-- **后端**: Rust + Axum
-- **数据**: JSON 文件存储
-- **部署**: 本地开发
+- **数据**: JSON 文件直接引入
+- **部署**: GitHub Pages (静态托管)
+
+### 部署说明
+
+1. 前端构建: `cd frontend && pnpm build`
+2. 构建产物在 `frontend/dist/`
+3. 部署到 GitHub Pages (通过 GitHub Actions 或手动上传)
 
 ### 响应式断点
 
