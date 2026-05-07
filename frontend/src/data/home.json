@@ -1,0 +1,12 @@
+{
+  "profile": {
+    "name": "Moon",
+    "title": "全栈开发者",
+    "bio": "Rust · React · WebAssembly\n热爱技术与创造"
+  },
+  "status": {
+    "projects": "10+",
+    "experience": "5Y",
+    "stack": "RUST/REACT"
+  }
+}
