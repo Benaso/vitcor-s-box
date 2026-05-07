@@ -37,10 +37,13 @@ jobs:
         run: pnpm build
         working-directory: frontend
 
+      - name: Copy to root
+        run: cp -r frontend/dist/. .
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend/dist
+          path: .
 
       - name: Deploy to GitHub Pages
         id: deployment
