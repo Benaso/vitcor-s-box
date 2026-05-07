@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(rustc --version)",
+      "Bash(java -version)",
+      "Bash(pnpm --version)",
+      "Bash(bun --version)",
+      "Bash(deno --version)"
+    ]
+  }
+}
