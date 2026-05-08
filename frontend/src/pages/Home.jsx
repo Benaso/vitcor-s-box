@@ -25,10 +25,10 @@ function Home() {
       >
         <Navbar />
         <main
-          style={{ flex: 1, position: 'relative' }}
+          style={{ flex: 1 }}
           onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
         >
-          <div style={{ maxWidth: '800px', margin: '0 auto', padding: '32px 16px' }}>
+          <div style={{ maxWidth: '800px', margin: '0 auto', padding: '80px 16px 32px' }}>
             <PixelCard style={{ marginBottom: '24px' }}>
               <SectionTitle>INTRO</SectionTitle>
               <h1
