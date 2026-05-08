@@ -194,7 +194,7 @@ function ParticleBackground({ mousePos }) {
       />
       <img
         ref={imageRef}
-        src="/images/vvictor.png"
+        src={`${import.meta.env.BASE_URL}images/vvictor.png`}
         style={{ display: 'none' }}
         alt=""
       />

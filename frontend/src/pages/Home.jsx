@@ -30,13 +30,13 @@ function Home() {
         >
           <h1
             style={{
-              fontFamily: 'monospace',
-              fontSize: '24px',
+              fontFamily: "'Press Start 2P', monospace",
+              fontSize: '18px',
               fontWeight: 'bold',
               color: 'var(--color-text)',
               marginBottom: '16px',
               textAlign: 'center',
-              letterSpacing: '4px'
+              letterSpacing: '2px'
             }}
           >
             YE DONGYU
@@ -51,7 +51,7 @@ function Home() {
               textAlign: 'center'
             }}
           >
-            工业领域的软件工程师
+            工业软件开发工程师
           </p>
 
           <div style={{ display: 'flex', gap: '16px', width: '100%', maxWidth: '600px', marginBottom: '40px' }}>
