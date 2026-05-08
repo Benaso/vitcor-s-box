@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 function ParticleBackground({ mousePos }) {
   const canvasRef = useRef(null)
