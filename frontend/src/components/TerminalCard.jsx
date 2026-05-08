@@ -9,9 +9,8 @@ function TerminalCard({ command }) {
 
     const timer = window.setInterval(() => {
       setVisibleCount((count) => {
-        if (count >= command.length) {
-          window.clearInterval(timer)
-          return count
+        if (count >= command.length + 109) {
+          return 0
         }
 
         return count + 1
@@ -31,7 +30,7 @@ function TerminalCard({ command }) {
       </div>
       <div className="terminal-card__body">
         <span className="terminal-card__prompt">$</span>
-        <span>{command.slice(0, visibleCount)}</span>
+        <span>{command.slice(0, Math.min(visibleCount, command.length))}</span>
         <span className="terminal-card__cursor" />
       </div>
     </PixelCard>
