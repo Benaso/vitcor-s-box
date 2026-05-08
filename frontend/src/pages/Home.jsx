@@ -4,8 +4,6 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PixelCard from '../components/PixelCard'
 import PixelButton from '../components/PixelButton'
-import SectionTitle from '../components/SectionTitle'
-import StatusBox from '../components/StatusBox'
 import homeData from '../data/home.json'
 
 function Home() {
@@ -19,45 +17,79 @@ function Home() {
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
           position: 'relative',
           zIndex: 1
         }}
       >
         <Navbar />
         <main
-          style={{ flex: 1 }}
+          style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 24px', width: '100%', maxWidth: '800px' }}
           onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
         >
-          <div style={{ maxWidth: '800px', margin: '0 auto', padding: '80px 16px 32px' }}>
-            <PixelCard style={{ marginBottom: '24px' }}>
-              <SectionTitle>INTRO</SectionTitle>
-              <h1
-                style={{
-                  fontFamily: 'monospace',
-                  fontSize: '28px',
-                  fontWeight: 'bold',
-                  marginBottom: '16px',
-                  lineHeight: '1.4'
-                }}
-              >
-                HELLO<br />WORLD
-              </h1>
-              <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: '1.8', marginBottom: '24px' }}>
-                {homeData.profile.title}<br />
-                {homeData.profile.bio}
-              </p>
-              <PixelButton>VIEW PROJECTS ▶</PixelButton>
-            </PixelCard>
+          <div style={{ marginBottom: '32px' }}>
+            <img
+              src="/images/vvictor.png"
+              alt="YE DONGYU"
+              style={{
+                width: '220px',
+                height: '220px',
+                objectFit: 'cover',
+                border: '4px solid var(--color-border)',
+                boxShadow: '8px 8px 0 var(--color-border)'
+              }}
+            />
+          </div>
 
-            <PixelCard>
-              <SectionTitle>STATUS</SectionTitle>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <StatusBox label="PROJECTS" value={homeData.status.projects} />
-                <StatusBox label="EXPERIENCE" value={homeData.status.experience} />
-                <StatusBox label="STACK" value={homeData.status.stack} />
+          <h1
+            style={{
+              fontFamily: 'monospace',
+              fontSize: '24px',
+              fontWeight: 'bold',
+              color: 'var(--color-text)',
+              marginBottom: '16px',
+              textAlign: 'center',
+              letterSpacing: '4px'
+            }}
+          >
+            YE DONGYU
+          </h1>
+
+          <p
+            style={{
+              fontFamily: 'monospace',
+              fontSize: '14px',
+              color: 'var(--color-text-muted)',
+              marginBottom: '40px',
+              textAlign: 'center'
+            }}
+          >
+            工业领域的软件工程师
+          </p>
+
+          <div style={{ display: 'flex', gap: '16px', width: '100%', maxWidth: '600px', marginBottom: '40px' }}>
+            <PixelCard style={{ flex: 1, textAlign: 'center', padding: '20px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// PROJECTS</div>
+              <div style={{ fontFamily: 'monospace', fontSize: '20px', fontWeight: 'bold', color: 'var(--color-text)' }}>
+                {homeData.status.projects}
+              </div>
+            </PixelCard>
+            <PixelCard style={{ flex: 1, textAlign: 'center', padding: '20px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// EXPERIENCE</div>
+              <div style={{ fontFamily: 'monospace', fontSize: '20px', fontWeight: 'bold', color: 'var(--color-text)' }}>
+                {homeData.status.experience}
+              </div>
+            </PixelCard>
+            <PixelCard style={{ flex: 1, textAlign: 'center', padding: '20px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// STACK</div>
+              <div style={{ fontFamily: 'monospace', fontSize: '14px', fontWeight: 'bold', color: 'var(--color-text)' }}>
+                {homeData.status.stack}
               </div>
             </PixelCard>
           </div>
+
+          <PixelButton>VIEW PROJECTS ▶</PixelButton>
         </main>
         <Footer />
       </div>

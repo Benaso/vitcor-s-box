@@ -1,0 +1,44 @@
+<h2>方案 C：全屏式布局</h2>
+<p class="subtitle">大尺寸头像居中 + 状态条并排展示</p>
+
+<div style="position: fixed; top: 16px; right: 24px; display: flex; gap: 12px; z-index: 10;">
+  <div style="background: #fff; padding: 10px 20px; border: 3px solid #2a2a2a; box-shadow: 4px 4px 0 #2a2a2a; font-family: monospace; font-size: 12px; color: #2a2a2a;">首页</div>
+  <div style="background: #2a2a2a; padding: 10px 20px; border: 3px solid #2a2a2a; box-shadow: none; font-family: monospace; font-size: 12px; color: #f5f2eb;">关于</div>
+  <div style="background: #fff; padding: 10px 20px; border: 3px solid #2a2a2a; box-shadow: 4px 4px 0 #2a2a2a; font-family: monospace; font-size: 12px; color: #2a2a2a;">项目</div>
+  <div style="background: #fff; padding: 10px 20px; border: 3px solid #2a2a2a; box-shadow: 4px 4px 0 #2a2a2a; font-family: monospace; font-size: 12px; color: #2a2a2a;">碎碎念</div>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 80px 24px;">
+  <div style="margin-bottom: 32px;">
+    <div style="width: 220px; height: 220px; border: 4px solid #2a2a2a; box-shadow: 8px 8px 0 #2a2a2a; background: #f5f2eb; display: flex; align-items: center; justify-content: center;">
+      <span style="font-family: monospace; color: #666;">[粒子头像]</span>
+    </div>
+  </div>
+
+  <h1 style="font-family: monospace; font-size: 24px; font-weight: bold; color: #2a2a2a; margin-bottom: 16px; text-align: center; letter-spacing: 4px;">YE DONGYU</h1>
+
+  <p style="font-family: monospace; font-size: 14px; color: #666; margin-bottom: 40px; text-align: center;">工业领域的软件工程师</p>
+
+  <div style="display: flex; gap: 16px; width: 100%; max-width: 600px;">
+    <div style="flex: 1; background: #fff; border: 4px solid #2a2a2a; box-shadow: 6px 6px 0 #2a2a2a; padding: 20px; text-align: center;">
+      <div style="font-size: 12px; color: #666; font-family: monospace; margin-bottom: 8px;">// PROJECTS</div>
+      <div style="font-family: monospace; font-size: 20px; color: #2a2a2a; font-weight: bold;">10+</div>
+    </div>
+    <div style="flex: 1; background: #fff; border: 4px solid #2a2a2a; box-shadow: 6px 6px 0 #2a2a2a; padding: 20px; text-align: center;">
+      <div style="font-size: 12px; color: #666; font-family: monospace; margin-bottom: 8px;">// EXPERIENCE</div>
+      <div style="font-family: monospace; font-size: 20px; color: #2a2a2a; font-weight: bold;">5Y</div>
+    </div>
+    <div style="flex: 1; background: #fff; border: 4px solid #2a2a2a; box-shadow: 6px 6px 0 #2a2a2a; padding: 20px; text-align: center;">
+      <div style="font-size: 12px; color: #666; font-family: monospace; margin-bottom: 8px;">// STACK</div>
+      <div style="font-family: monospace; font-size: 14px; color: #2a2a2a; font-weight: bold;">RUST/REACT</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 40px;">
+    <div style="background: #2a2a2a; padding: 14px 32px; border: 3px solid #2a2a2a; box-shadow: 4px 4px 0 #888; font-family: monospace; font-size: 12px; color: #f5f2eb; cursor: pointer;">VIEW PROJECTS ▶</div>
+  </div>
+</div>
+
+<div style="position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #666; font-family: monospace;">
+  © 2026 MOON.DEV — BUILD WITH RUST + REACT
+</div>
