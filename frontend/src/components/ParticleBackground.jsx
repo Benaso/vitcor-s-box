@@ -23,9 +23,9 @@ function ParticleBackground({ mousePos }) {
         this.x = x
         this.y = y
         this.color = color
-        this.size = 4
+        this.size = 2
         this.speed = 0.08
-        this.opacity = 0.9
+        this.opacity = 0.95
       }
 
       update(mouseX, mouseY) {
@@ -33,16 +33,16 @@ function ParticleBackground({ mousePos }) {
         const dy = mouseY - this.y
         const dist = Math.sqrt(dx * dx + dy * dy)
 
-        if (dist < 150) {
-          const force = (150 - dist) / 150
+        if (dist < 120) {
+          const force = (120 - dist) / 120
           const angle = Math.atan2(dy, dx)
-          this.x -= Math.cos(angle) * force * 20
-          this.y -= Math.sin(angle) * force * 20
-          this.opacity = 0.2 + (1 - force) * 0.5
+          this.x -= Math.cos(angle) * force * 18
+          this.y -= Math.sin(angle) * force * 18
+          this.opacity = 0.15 + (1 - force) * 0.4
         } else {
           this.x += (this.originX - this.x) * this.speed
           this.y += (this.originY - this.y) * this.speed
-          this.opacity = 0.9
+          this.opacity = 0.95
         }
       }
 
@@ -62,7 +62,7 @@ function ParticleBackground({ mousePos }) {
       const tempCanvas = document.createElement('canvas')
       const tempCtx = tempCanvas.getContext('2d')
 
-      const avatarSize = 200
+      const avatarSize = 240
       tempCanvas.width = avatarSize
       tempCanvas.height = avatarSize
 
@@ -81,10 +81,10 @@ function ParticleBackground({ mousePos }) {
       const data = imageData.data
 
       particles = []
-      const spacing = 5
+      const spacing = 3
 
       const centerX = canvas.width / 2
-      const centerY = canvas.height / 2 - 80
+      const centerY = canvas.height / 2 - 120
 
       for (let y = 0; y < avatarSize; y += spacing) {
         for (let x = 0; x < avatarSize; x += spacing) {
@@ -95,10 +95,12 @@ function ParticleBackground({ mousePos }) {
           const a = data[i + 3]
 
           if (a > 128) {
+            const brightness = (r + g + b) / 3
+            const contrast = brightness < 128 ? 30 : 180
             particles.push(new Particle(
               centerX - avatarSize / 2 + x,
               centerY - avatarSize / 2 + y,
-              `rgb(${r}, ${g}, ${b})`
+              `rgb(${contrast}, ${contrast}, ${contrast})`
             ))
           }
         }
