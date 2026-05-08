@@ -124,7 +124,7 @@ a {
   flex: 1;
   width: 100%;
   max-width: 800px;
-  padding: 152px 24px 48px;
+  padding: 220px 24px 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -158,6 +158,99 @@ a {
   display: flex;
   gap: 16px;
   margin-bottom: 40px;
+}
+
+.terminal-card__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--color-bg);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.terminal-card__bar span {
+  width: 10px;
+  height: 10px;
+  background: var(--color-border);
+  border: 2px solid var(--color-border);
+}
+
+.terminal-card__bar strong {
+  margin-left: 6px;
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--color-text-muted);
+}
+
+.terminal-card__body {
+  min-height: 108px;
+  padding: 24px;
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1.8;
+  color: var(--color-text);
+  text-align: left;
+  word-break: break-word;
+}
+
+.terminal-card__prompt {
+  margin-right: 10px;
+  color: var(--color-text-muted);
+}
+
+.terminal-card__cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.2em;
+  margin-left: 4px;
+  vertical-align: -0.2em;
+  background: var(--color-border);
+  animation: terminal-cursor-blink 1s steps(1, end) infinite;
+}
+
+.content-page {
+  width: 100%;
+  padding-top: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.content-page__title {
+  margin-bottom: 16px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+.content-page__intro,
+.content-page__item-body {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--color-text-muted);
+}
+
+.content-page__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.content-page__item-label {
+  margin-bottom: 10px;
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.content-page__item-title {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: var(--color-text);
 }
 
 ::-webkit-scrollbar {
@@ -339,6 +432,17 @@ a {
   }
 }
 
+@keyframes terminal-cursor-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @media (max-width: 767px) {
   :root {
     --shadow-offset: 3px;
@@ -473,6 +577,26 @@ a {
 
   .home-status-grid > div {
     width: 100%;
+  }
+
+  .terminal-card__body {
+    min-height: 132px;
+    padding: 18px;
+    font-size: 15px;
+  }
+
+  .content-page {
+    padding-top: 80px;
+    gap: 18px;
+  }
+
+  .content-page__title {
+    font-size: 14px;
+  }
+
+  .content-page__grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
   }
 
   .pixel-transition__badge {

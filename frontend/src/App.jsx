@@ -1,5 +1,8 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
+import About from './pages/About'
+import Projects from './pages/Projects'
+import Blog from './pages/Blog'
 import Hobbies from './pages/Hobbies'
 import Layout from './components/Layout'
 import PixelRouteTransition from './components/PixelRouteTransition'
@@ -13,6 +16,9 @@ function App() {
           <PixelRouteTransition />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/blog" element={<Blog />} />
             <Route path="/hobbies" element={<Hobbies />} />
           </Routes>
         </Layout>

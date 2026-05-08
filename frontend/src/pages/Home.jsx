@@ -1,8 +1,7 @@
 import { useRef, useState } from 'react'
 import ParticleBackground from '../components/ParticleBackground'
-import PixelCard from '../components/PixelCard'
 import PixelButton from '../components/PixelButton'
-import homeData from '../data/home.json'
+import TerminalCard from '../components/TerminalCard'
 import { useLanguage } from '../i18n/LanguageContext'
 
 function Home() {
@@ -46,26 +45,7 @@ function Home() {
             {t.home.subtitle}
           </p>
 
-          <div className="home-status-grid">
-            <PixelCard style={{ flex: 1, textAlign: 'center', padding: '20px' }}>
-              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// {t.home.status.projects}</div>
-              <div style={{ fontFamily: 'monospace', fontSize: '20px', fontWeight: 'bold', color: 'var(--color-text)' }}>
-                {homeData.status.projects}
-              </div>
-            </PixelCard>
-            <PixelCard style={{ flex: 1, textAlign: 'center', padding: '20px' }}>
-              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// {t.home.status.experience}</div>
-              <div style={{ fontFamily: 'monospace', fontSize: '20px', fontWeight: 'bold', color: 'var(--color-text)' }}>
-                {homeData.status.experience}
-              </div>
-            </PixelCard>
-            <PixelCard style={{ flex: 1, textAlign: 'center', padding: '20px' }}>
-              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// {t.home.status.stack}</div>
-              <div style={{ fontFamily: 'monospace', fontSize: '14px', fontWeight: 'bold', color: 'var(--color-text)' }}>
-                {homeData.status.stack}
-              </div>
-            </PixelCard>
-          </div>
+          <TerminalCard command={t.home.terminal} />
 
           <PixelButton>{t.home.viewProjects}</PixelButton>
         </main>

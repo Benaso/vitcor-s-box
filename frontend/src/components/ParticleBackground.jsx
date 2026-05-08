@@ -16,33 +16,71 @@ function ParticleBackground({ mousePos, hideAtRef }) {
     let particles = []
     let imageLoaded = false
     let avatarCenter = null
-    const getAvatarSize = () => {
-      if (window.innerWidth < 360) return 156
-      if (window.innerWidth < 640) return 176
-      return 240
+
+    const getAvatarLayout = () => {
+      const navRect = document.querySelector('.site-nav')?.getBoundingClientRect()
+
+      if (window.innerWidth < 768) {
+        const size = window.innerWidth < 360 ? 156 : 176
+        const navBottom = navRect ? navRect.bottom : 56
+
+        return {
+          mode: 'mobile',
+          size,
+          centerX: window.innerWidth / 2,
+          centerY: navBottom + 8 + size / 2,
+          disperseTriggerOffset: 16
+        }
+      }
+
+      if (window.innerWidth < 1024) {
+        const size = 240
+        const navBottom = navRect ? navRect.bottom : 76
+
+        return {
+          mode: 'tablet',
+          size,
+          centerX: window.innerWidth / 2,
+          centerY: navBottom + 24 + size / 2,
+          disperseTriggerOffset: 32
+        }
+      }
+
+      const size = 280
+      const navBottom = navRect ? navRect.bottom : 76
+
+      return {
+        mode: 'desktop',
+        size,
+        centerX: window.innerWidth / 2,
+        centerY: navBottom + 48 + size / 2,
+        disperseTriggerOffset: 96
+      }
     }
 
-    let avatarSize = getAvatarSize()
+    let avatarLayout = getAvatarLayout()
+    let avatarSize = avatarLayout.size
+    let avatarMode = avatarLayout.mode
     const mouseInfluenceRadius = 28
     const touchInfluenceRadius = 44
 
     const getAvatarCenter = () => {
-      const navRect = document.querySelector('.site-nav')?.getBoundingClientRect()
-      const isMobile = window.innerWidth < 640
-      const safeGap = isMobile ? 8 : 24
-      const fallbackTop = isMobile ? 56 : 76
-      const navBottom = navRect ? navRect.bottom : fallbackTop
+      avatarLayout = getAvatarLayout()
+      avatarSize = avatarLayout.size
+      avatarMode = avatarLayout.mode
 
       return {
-        x: window.innerWidth / 2,
-        y: navBottom + safeGap + avatarSize / 2
+        x: avatarLayout.centerX,
+        y: avatarLayout.centerY
       }
     }
 
     const resize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
-      avatarSize = getAvatarSize()
+      avatarLayout = getAvatarLayout()
+      avatarSize = avatarLayout.size
+      avatarMode = avatarLayout.mode
     }
 
     class Particle {
@@ -156,13 +194,12 @@ function ParticleBackground({ mousePos, hideAtRef }) {
 
       const titleTop = hideAtRef?.current?.getBoundingClientRect().top
       const avatarBottom = avatarCenter ? avatarCenter.y + avatarSize / 2 : 0
-      const disperseTriggerOffset = window.innerWidth < 640 ? 16 : 96
       const hasScrolled = window.scrollY > 8
       const shouldDisperseAvatar = (
         hasScrolled
         &&
         typeof titleTop === 'number'
-        && avatarBottom + disperseTriggerOffset >= titleTop
+        && avatarBottom + avatarLayout.disperseTriggerOffset >= titleTop
       )
 
       particles.forEach(p => {
@@ -192,11 +229,19 @@ function ParticleBackground({ mousePos, hideAtRef }) {
     img.addEventListener('load', handleImageLoad)
 
     const handleResize = () => {
+      const previousMode = avatarMode
       const nextCenter = getAvatarCenter()
       const dx = avatarCenter ? nextCenter.x - avatarCenter.x : 0
       const dy = avatarCenter ? nextCenter.y - avatarCenter.y : 0
 
       resize()
+
+      if (previousMode !== avatarMode) {
+        avatarCenter = nextCenter
+        imageLoaded = false
+        loadImage()
+        return
+      }
 
       if (avatarCenter && (dx || dy)) {
         particles.forEach((particle) => {
