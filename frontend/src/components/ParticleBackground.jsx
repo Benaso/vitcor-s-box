@@ -3,6 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 function ParticleBackground({ mousePos }) {
   const canvasRef = useRef(null)
   const imageRef = useRef(null)
+  const mousePosRef = useRef(mousePos)
+
+  useEffect(() => {
+    mousePosRef.current = mousePos
+  }, [mousePos])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -10,6 +15,13 @@ function ParticleBackground({ mousePos }) {
     let animationId
     let particles = []
     let imageLoaded = false
+    let avatarCenter = null
+    const mouseInfluenceRadius = 72
+
+    const getAvatarCenter = () => ({
+      x: window.innerWidth / 2,
+      y: 180
+    })
 
     const resize = () => {
       canvas.width = window.innerWidth
@@ -33,8 +45,8 @@ function ParticleBackground({ mousePos }) {
         const dy = mouseY - this.y
         const dist = Math.sqrt(dx * dx + dy * dy)
 
-        if (dist < 120) {
-          const force = (120 - dist) / 120
+        if (dist < mouseInfluenceRadius) {
+          const force = (mouseInfluenceRadius - dist) / mouseInfluenceRadius
           const angle = Math.atan2(dy, dx)
           this.x -= Math.cos(angle) * force * 18
           this.y -= Math.sin(angle) * force * 18
@@ -83,8 +95,12 @@ function ParticleBackground({ mousePos }) {
       particles = []
       const spacing = 3
 
-      const centerX = canvas.width / 2
-      const centerY = 180
+      if (!avatarCenter) {
+        avatarCenter = getAvatarCenter()
+      }
+
+      const centerX = avatarCenter.x
+      const centerY = avatarCenter.y
 
       for (let y = 0; y < avatarSize; y += spacing) {
         for (let x = 0; x < avatarSize; x += spacing) {
@@ -96,7 +112,7 @@ function ParticleBackground({ mousePos }) {
 
           if (a > 128) {
             const brightness = (r + g + b) / 3
-            const contrast = brightness < 128 ? 30 : 180
+            const contrast = brightness < 128 ? 0 : 180
             particles.push(new Particle(
               centerX - avatarSize / 2 + x,
               centerY - avatarSize / 2 + y,
@@ -112,7 +128,8 @@ function ParticleBackground({ mousePos }) {
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       particles.forEach(p => {
-        p.update(mousePos.x, mousePos.y)
+        const { x, y } = mousePosRef.current
+        p.update(x, y)
         p.draw()
       })
 
@@ -133,17 +150,33 @@ function ParticleBackground({ mousePos }) {
 
     img.addEventListener('load', handleImageLoad)
 
-    window.addEventListener('resize', () => {
+    const handleResize = () => {
+      const nextCenter = getAvatarCenter()
+      const dx = avatarCenter ? nextCenter.x - avatarCenter.x : 0
+      const dy = avatarCenter ? nextCenter.y - avatarCenter.y : 0
+
       resize()
-      loadImage()
-    })
+
+      if (avatarCenter && (dx || dy)) {
+        particles.forEach((particle) => {
+          particle.originX += dx
+          particle.originY += dy
+          particle.x += dx
+          particle.y += dy
+        })
+      }
+
+      avatarCenter = nextCenter
+    }
+
+    window.addEventListener('resize', handleResize)
 
     return () => {
       cancelAnimationFrame(animationId)
-      window.removeEventListener('resize', resize)
+      window.removeEventListener('resize', handleResize)
       img.removeEventListener('load', handleImageLoad)
     }
-  }, [mousePos])
+  }, [])
 
   return (
     <>
