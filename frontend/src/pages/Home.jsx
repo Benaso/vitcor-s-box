@@ -14,10 +14,18 @@ function Home() {
   return (
     <>
       <ParticleBackground mousePos={mousePos} />
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          zIndex: 1
+        }}
+      >
         <Navbar />
         <main
-          style={{ flex: 1, zIndex: 1, position: 'relative' }}
+          style={{ flex: 1, position: 'relative' }}
           onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
         >
           <div style={{ maxWidth: '800px', margin: '0 auto', padding: '32px 16px' }}>
