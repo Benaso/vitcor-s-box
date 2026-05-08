@@ -1,15 +1,11 @@
+import { useLanguage } from '../i18n/LanguageContext'
+
 function Footer() {
+  const { t } = useLanguage()
+
   return (
-    <footer
-      style={{
-        padding: '16px 24px',
-        borderTop: 'var(--border-width) solid var(--color-border)',
-        textAlign: 'center',
-        fontSize: '12px',
-        color: 'var(--color-text-muted)'
-      }}
-    >
-      © 2026 MOON.DEV — BUILD WITH RUST + REACT
+    <footer className="site-footer">
+      {t.footer}
     </footer>
   )
 }

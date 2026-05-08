@@ -16,17 +16,33 @@ function ParticleBackground({ mousePos, hideAtRef }) {
     let particles = []
     let imageLoaded = false
     let avatarCenter = null
-    const avatarSize = 240
-    const mouseInfluenceRadius = 72
+    const getAvatarSize = () => {
+      if (window.innerWidth < 360) return 156
+      if (window.innerWidth < 640) return 176
+      return 240
+    }
 
-    const getAvatarCenter = () => ({
-      x: window.innerWidth / 2,
-      y: 180
-    })
+    let avatarSize = getAvatarSize()
+    const mouseInfluenceRadius = 28
+    const touchInfluenceRadius = 44
+
+    const getAvatarCenter = () => {
+      const navRect = document.querySelector('.site-nav')?.getBoundingClientRect()
+      const isMobile = window.innerWidth < 640
+      const safeGap = isMobile ? 8 : 24
+      const fallbackTop = isMobile ? 56 : 76
+      const navBottom = navRect ? navRect.bottom : fallbackTop
+
+      return {
+        x: window.innerWidth / 2,
+        y: navBottom + safeGap + avatarSize / 2
+      }
+    }
 
     const resize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
+      avatarSize = getAvatarSize()
     }
 
     class Particle {
@@ -45,7 +61,7 @@ function ParticleBackground({ mousePos, hideAtRef }) {
         this.disperseY = y + Math.sin(angle) * distance
       }
 
-      update(mouseX, mouseY, shouldDisperse) {
+      update(mouseX, mouseY, shouldDisperse, influenceRadius) {
         if (shouldDisperse) {
           this.x += (this.disperseX - this.x) * 0.035
           this.y += (this.disperseY - this.y) * 0.035
@@ -57,8 +73,8 @@ function ParticleBackground({ mousePos, hideAtRef }) {
         const dy = mouseY - this.y
         const dist = Math.sqrt(dx * dx + dy * dy)
 
-        if (dist < mouseInfluenceRadius) {
-          const force = (mouseInfluenceRadius - dist) / mouseInfluenceRadius
+        if (dist < influenceRadius) {
+          const force = (influenceRadius - dist) / influenceRadius
           const angle = Math.atan2(dy, dx)
           this.x -= Math.cos(angle) * force * 18
           this.y -= Math.sin(angle) * force * 18
@@ -140,11 +156,19 @@ function ParticleBackground({ mousePos, hideAtRef }) {
 
       const titleTop = hideAtRef?.current?.getBoundingClientRect().top
       const avatarBottom = avatarCenter ? avatarCenter.y + avatarSize / 2 : 0
-      const shouldDisperseAvatar = typeof titleTop === 'number' && avatarBottom >= titleTop
+      const disperseTriggerOffset = window.innerWidth < 640 ? 16 : 96
+      const hasScrolled = window.scrollY > 8
+      const shouldDisperseAvatar = (
+        hasScrolled
+        &&
+        typeof titleTop === 'number'
+        && avatarBottom + disperseTriggerOffset >= titleTop
+      )
 
       particles.forEach(p => {
-        const { x, y } = mousePosRef.current
-        p.update(x, y, shouldDisperseAvatar)
+        const { x, y, type } = mousePosRef.current
+        const influenceRadius = type === 'touch' ? touchInfluenceRadius : mouseInfluenceRadius
+        p.update(x, y, shouldDisperseAvatar, influenceRadius)
         if (p.opacity > 0.01) {
           p.draw()
         }

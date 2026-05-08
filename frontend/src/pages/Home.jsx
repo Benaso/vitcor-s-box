@@ -1,85 +1,74 @@
 import { useRef, useState } from 'react'
 import ParticleBackground from '../components/ParticleBackground'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
 import PixelCard from '../components/PixelCard'
 import PixelButton from '../components/PixelButton'
 import homeData from '../data/home.json'
+import { useLanguage } from '../i18n/LanguageContext'
 
 function Home() {
-  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 })
+  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000, type: 'mouse' })
   const titleRef = useRef(null)
+  const { t } = useLanguage()
+
+  const handlePointerMove = (event) => {
+    setMousePos({
+      x: event.clientX,
+      y: event.clientY,
+      type: event.pointerType || 'mouse'
+    })
+  }
+
+  const handleTouchMove = (event) => {
+    const touch = event.touches[0]
+    if (!touch) return
+
+    setMousePos({
+      x: touch.clientX,
+      y: touch.clientY,
+      type: 'touch'
+    })
+  }
 
   return (
     <>
       <ParticleBackground mousePos={mousePos} hideAtRef={titleRef} />
-      <div
-        style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          zIndex: 1
-        }}
-      >
-        <Navbar />
+      <div className="home-page">
         <main
-          style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 24px', width: '100%', maxWidth: '800px' }}
-          onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+          className="home-hero"
+          onPointerMove={handlePointerMove}
+          onTouchMove={handleTouchMove}
         >
-          <h1
-            ref={titleRef}
-            style={{
-              fontFamily: "'Press Start 2P', monospace",
-              fontSize: '18px',
-              fontWeight: 'bold',
-              color: 'var(--color-text)',
-              marginBottom: '16px',
-              textAlign: 'center',
-              letterSpacing: '2px'
-            }}
-          >
-            YE DONGYU
+          <h1 ref={titleRef} className="home-title">
+            {t.home.title}
           </h1>
 
-          <p
-            style={{
-              fontFamily: 'monospace',
-              fontSize: '14px',
-              color: 'var(--color-text-muted)',
-              marginBottom: '40px',
-              textAlign: 'center'
-            }}
-          >
-            工业软件开发工程师/AI Agent开发工程师
+          <p className="home-subtitle">
+            {t.home.subtitle}
           </p>
 
-          <div style={{ display: 'flex', gap: '16px', width: '100%', maxWidth: '600px', marginBottom: '40px' }}>
+          <div className="home-status-grid">
             <PixelCard style={{ flex: 1, textAlign: 'center', padding: '20px' }}>
-              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// PROJECTS</div>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// {t.home.status.projects}</div>
               <div style={{ fontFamily: 'monospace', fontSize: '20px', fontWeight: 'bold', color: 'var(--color-text)' }}>
                 {homeData.status.projects}
               </div>
             </PixelCard>
             <PixelCard style={{ flex: 1, textAlign: 'center', padding: '20px' }}>
-              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// EXPERIENCE</div>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// {t.home.status.experience}</div>
               <div style={{ fontFamily: 'monospace', fontSize: '20px', fontWeight: 'bold', color: 'var(--color-text)' }}>
                 {homeData.status.experience}
               </div>
             </PixelCard>
             <PixelCard style={{ flex: 1, textAlign: 'center', padding: '20px' }}>
-              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// STACK</div>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace', marginBottom: '8px' }}>// {t.home.status.stack}</div>
               <div style={{ fontFamily: 'monospace', fontSize: '14px', fontWeight: 'bold', color: 'var(--color-text)' }}>
                 {homeData.status.stack}
               </div>
             </PixelCard>
           </div>
 
-          <PixelButton>VIEW PROJECTS ▶</PixelButton>
+          <PixelButton>{t.home.viewProjects}</PixelButton>
         </main>
-        <Footer />
       </div>
     </>
   )

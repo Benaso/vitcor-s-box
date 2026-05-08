@@ -7,9 +7,10 @@ function PixelButton({ children, onClick, variant = 'default' }) {
   return (
     <button
       onClick={onClick}
-      onMouseDown={() => setPressed(true)}
-      onMouseUp={() => setPressed(false)}
-      onMouseLeave={() => setPressed(false)}
+      onPointerDown={() => setPressed(true)}
+      onPointerUp={() => setPressed(false)}
+      onPointerCancel={() => setPressed(false)}
+      onPointerLeave={() => setPressed(false)}
       style={{
         background: isActive ? 'var(--color-border)' : '#fff',
         color: isActive ? 'var(--color-bg)' : 'var(--color-text)',

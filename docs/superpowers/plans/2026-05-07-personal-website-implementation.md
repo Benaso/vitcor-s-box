@@ -342,7 +342,7 @@ function Footer() {
         color: 'var(--color-text-muted)'
       }}
     >
-      © 2026 MOON.DEV — BUILD WITH RUST + REACT
+      ©  2002 -- 2026: a gift for my 24 
     </footer>
   )
 }
