@@ -6,7 +6,11 @@
       "Bash(java -version)",
       "Bash(pnpm --version)",
       "Bash(bun --version)",
-      "Bash(deno --version)"
+      "Bash(deno --version)",
+      "Bash(curl -s \"https://benaso.github.io/vitcor-s-box/\" --connect-timeout 10)",
+      "Bash(curl -s \"https://api.github.com/repos/Benaso/vitcor-s-box/pages\")",
+      "Bash(mkdir -p \"d:/projects/myWeb/frontend/public/images\")",
+      "Bash(cp \"d:/projects/myWeb/frontend/static_res/vvictor.png\" \"d:/projects/myWeb/frontend/public/images/\")"
     ]
   }
 }
