@@ -28,20 +28,6 @@ function Home() {
           style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 24px', width: '100%', maxWidth: '800px' }}
           onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
         >
-          <div style={{ marginBottom: '32px' }}>
-            <img
-              src="/images/vvictor.png"
-              alt="YE DONGYU"
-              style={{
-                width: '220px',
-                height: '220px',
-                objectFit: 'cover',
-                border: '4px solid var(--color-border)',
-                boxShadow: '8px 8px 0 var(--color-border)'
-              }}
-            />
-          </div>
-
           <h1
             style={{
               fontFamily: 'monospace',

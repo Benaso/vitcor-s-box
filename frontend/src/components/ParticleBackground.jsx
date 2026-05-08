@@ -9,6 +9,7 @@ function ParticleBackground({ mousePos }) {
     const ctx = canvas.getContext('2d')
     let animationId
     let particles = []
+    let imageLoaded = false
 
     const resize = () => {
       canvas.width = window.innerWidth
@@ -22,7 +23,7 @@ function ParticleBackground({ mousePos }) {
         this.x = x
         this.y = y
         this.color = color
-        this.size = 3
+        this.size = 4
         this.speed = 0.08
         this.opacity = 0.9
       }
@@ -32,11 +33,11 @@ function ParticleBackground({ mousePos }) {
         const dy = mouseY - this.y
         const dist = Math.sqrt(dx * dx + dy * dy)
 
-        if (dist < 120) {
-          const force = (120 - dist) / 120
+        if (dist < 150) {
+          const force = (150 - dist) / 150
           const angle = Math.atan2(dy, dx)
-          this.x -= Math.cos(angle) * force * 15
-          this.y -= Math.sin(angle) * force * 15
+          this.x -= Math.cos(angle) * force * 20
+          this.y -= Math.sin(angle) * force * 20
           this.opacity = 0.2 + (1 - force) * 0.5
         } else {
           this.x += (this.originX - this.x) * this.speed
@@ -55,38 +56,39 @@ function ParticleBackground({ mousePos }) {
 
     const loadImage = () => {
       const img = imageRef.current
-      if (!img.complete) return
+      if (!img.complete || imageLoaded) return
+      imageLoaded = true
 
       const tempCanvas = document.createElement('canvas')
       const tempCtx = tempCanvas.getContext('2d')
 
-      const imgSize = Math.min(canvas.width * 0.35, 280)
-      tempCanvas.width = imgSize
-      tempCanvas.height = imgSize
+      const avatarSize = 200
+      tempCanvas.width = avatarSize
+      tempCanvas.height = avatarSize
 
       tempCtx.fillStyle = '#f5f2eb'
-      tempCtx.fillRect(0, 0, imgSize, imgSize)
+      tempCtx.fillRect(0, 0, avatarSize, avatarSize)
 
-      const scale = Math.min(imgSize / img.width, imgSize / img.height)
+      const scale = Math.min(avatarSize / img.width, avatarSize / img.height)
       const drawW = img.width * scale
       const drawH = img.height * scale
-      const drawX = (imgSize - drawW) / 2
-      const drawY = (imgSize - drawH) / 2
+      const drawX = (avatarSize - drawW) / 2
+      const drawY = (avatarSize - drawH) / 2
 
       tempCtx.drawImage(img, drawX, drawY, drawW, drawH)
 
-      const imageData = tempCtx.getImageData(0, 0, imgSize, imgSize)
+      const imageData = tempCtx.getImageData(0, 0, avatarSize, avatarSize)
       const data = imageData.data
 
       particles = []
-      const spacing = 4
+      const spacing = 5
 
-      const centerX = (canvas.width - imgSize) / 2
-      const centerY = (canvas.height - imgSize) / 2
+      const centerX = canvas.width / 2
+      const centerY = canvas.height / 2 - 80
 
-      for (let y = 0; y < imgSize; y += spacing) {
-        for (let x = 0; x < imgSize; x += spacing) {
-          const i = (y * imgSize + x) * 4
+      for (let y = 0; y < avatarSize; y += spacing) {
+        for (let x = 0; x < avatarSize; x += spacing) {
+          const i = (y * avatarSize + x) * 4
           const r = data[i]
           const g = data[i + 1]
           const b = data[i + 2]
@@ -94,8 +96,8 @@ function ParticleBackground({ mousePos }) {
 
           if (a > 128) {
             particles.push(new Particle(
-              centerX + x,
-              centerY + y,
+              centerX - avatarSize / 2 + x,
+              centerY - avatarSize / 2 + y,
               `rgb(${r}, ${g}, ${b})`
             ))
           }
@@ -123,6 +125,12 @@ function ParticleBackground({ mousePos }) {
 
     draw()
 
+    const handleImageLoad = () => {
+      loadImage()
+    }
+
+    img.addEventListener('load', handleImageLoad)
+
     window.addEventListener('resize', () => {
       resize()
       loadImage()
@@ -131,6 +139,7 @@ function ParticleBackground({ mousePos }) {
     return () => {
       cancelAnimationFrame(animationId)
       window.removeEventListener('resize', resize)
+      img.removeEventListener('load', handleImageLoad)
     }
   }, [mousePos])
 
