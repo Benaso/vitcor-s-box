@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
-function ParticleBackground({ mousePos }) {
+function ParticleBackground({ mousePos, hideAtRef }) {
   const canvasRef = useRef(null)
   const imageRef = useRef(null)
   const mousePosRef = useRef(mousePos)
@@ -16,6 +16,7 @@ function ParticleBackground({ mousePos }) {
     let particles = []
     let imageLoaded = false
     let avatarCenter = null
+    const avatarSize = 240
     const mouseInfluenceRadius = 72
 
     const getAvatarCenter = () => ({
@@ -38,9 +39,20 @@ function ParticleBackground({ mousePos }) {
         this.size = 2
         this.speed = 0.08
         this.opacity = 0.95
+        const angle = Math.random() * Math.PI * 2
+        const distance = 80 + Math.random() * 140
+        this.disperseX = x + Math.cos(angle) * distance
+        this.disperseY = y + Math.sin(angle) * distance
       }
 
-      update(mouseX, mouseY) {
+      update(mouseX, mouseY, shouldDisperse) {
+        if (shouldDisperse) {
+          this.x += (this.disperseX - this.x) * 0.035
+          this.y += (this.disperseY - this.y) * 0.035
+          this.opacity += (0 - this.opacity) * 0.045
+          return
+        }
+
         const dx = mouseX - this.x
         const dy = mouseY - this.y
         const dist = Math.sqrt(dx * dx + dy * dy)
@@ -54,7 +66,7 @@ function ParticleBackground({ mousePos }) {
         } else {
           this.x += (this.originX - this.x) * this.speed
           this.y += (this.originY - this.y) * this.speed
-          this.opacity = 0.95
+          this.opacity += (0.95 - this.opacity) * 0.08
         }
       }
 
@@ -74,7 +86,6 @@ function ParticleBackground({ mousePos }) {
       const tempCanvas = document.createElement('canvas')
       const tempCtx = tempCanvas.getContext('2d')
 
-      const avatarSize = 240
       tempCanvas.width = avatarSize
       tempCanvas.height = avatarSize
 
@@ -127,10 +138,16 @@ function ParticleBackground({ mousePos }) {
       ctx.fillStyle = '#f5f2eb'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
+      const titleTop = hideAtRef?.current?.getBoundingClientRect().top
+      const avatarBottom = avatarCenter ? avatarCenter.y + avatarSize / 2 : 0
+      const shouldDisperseAvatar = typeof titleTop === 'number' && avatarBottom >= titleTop
+
       particles.forEach(p => {
         const { x, y } = mousePosRef.current
-        p.update(x, y)
-        p.draw()
+        p.update(x, y, shouldDisperseAvatar)
+        if (p.opacity > 0.01) {
+          p.draw()
+        }
       })
 
       animationId = requestAnimationFrame(draw)
@@ -163,6 +180,8 @@ function ParticleBackground({ mousePos }) {
           particle.originY += dy
           particle.x += dx
           particle.y += dy
+          particle.disperseX += dx
+          particle.disperseY += dy
         })
       }
 

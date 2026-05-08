@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import ParticleBackground from '../components/ParticleBackground'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -8,10 +8,11 @@ import homeData from '../data/home.json'
 
 function Home() {
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 })
+  const titleRef = useRef(null)
 
   return (
     <>
-      <ParticleBackground mousePos={mousePos} />
+      <ParticleBackground mousePos={mousePos} hideAtRef={titleRef} />
       <div
         style={{
           minHeight: '100vh',
@@ -29,6 +30,7 @@ function Home() {
           onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
         >
           <h1
+            ref={titleRef}
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '18px',
@@ -51,7 +53,7 @@ function Home() {
               textAlign: 'center'
             }}
           >
-            工业软件开发工程师
+            工业软件开发工程师/AI Agent开发工程师
           </p>
 
           <div style={{ display: 'flex', gap: '16px', width: '100%', maxWidth: '600px', marginBottom: '40px' }}>
