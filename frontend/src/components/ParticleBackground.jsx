@@ -84,7 +84,7 @@ function ParticleBackground({ mousePos }) {
       const spacing = 3
 
       const centerX = canvas.width / 2
-      const centerY = canvas.height / 2 - 120
+      const centerY = 180
 
       for (let y = 0; y < avatarSize; y += spacing) {
         for (let x = 0; x < avatarSize; x += spacing) {
