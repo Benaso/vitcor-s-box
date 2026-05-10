@@ -1,9 +1,24 @@
 import { useEffect, useRef } from 'react'
 
 const codePool = [
-  '{', '}', '[', ']', '(', ')', '<', '>', '/', '*', ';',
-  'const', 'let', 'var', 'function', 'if', 'else', 'return',
-  '=>', '===', '!==', '&&', '||', '++', '--',
+  // 符号
+  '{', '}', '[', ']', '(', ')', '<', '>', '/', '*', ';', ':', '"', "'",
+  // JS/TS 关键字
+  'const', 'let', 'var', 'function', 'if', 'else', 'return', 'async', 'await',
+  '=>', '===', '!==', '&&', '||', '++', '--', 'import', 'export', 'from',
+  // Rust 关键字
+  'fn', 'let', 'mut', 'pub', 'impl', 'trait', 'struct', 'enum', 'match',
+  'Option', 'Result', 'Some', 'None', 'Ok', 'Err', 'unwrap', 'expect',
+  'move', 'where', 'self', 'Self', 'async', 'await',
+  // Go 关键字
+  'func', 'go', 'defer', 'chan', 'goroutine', 'interface', 'map', 'make',
+  'package', 'import', 'return', 'nil', 'true', 'false', 'append', 'range',
+  'struct', 'type', 'error', 'defer', 'select', 'case',
+  // Java 关键字
+  'public', 'private', 'class', 'static', 'void', 'int', 'String', 'new',
+  'try', 'catch', 'finally', 'throw', 'extends', 'implements', 'interface',
+  'abstract', 'final', 'synchronized', 'volatile',
+  // 数字
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 ]
 
