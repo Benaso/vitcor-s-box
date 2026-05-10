@@ -9,12 +9,7 @@ const initialMessages = [
 ]
 
 function BTGlobalTerminal() {
-  const {
-    closeBTTerminal,
-    isBTTerminalEnabled,
-    isBTTerminalOpen,
-    openBTTerminal
-  } = useBTTerminal()
+  const { closeBTTerminal } = useBTTerminal()
   const [messages, setMessages] = useState(initialMessages)
   const [draft, setDraft] = useState('')
   const [isSending, setIsSending] = useState(false)
@@ -60,68 +55,41 @@ function BTGlobalTerminal() {
     }
   }
 
-  if (!isBTTerminalEnabled) {
-    return null
-  }
-
   return (
-    <aside className={`bt-global-terminal ${isBTTerminalOpen ? 'is-open' : 'is-collapsed'}`} aria-label="Marvin terminal">
-      {!isBTTerminalOpen && (
-        <button className="bt-global-terminal__launcher" type="button" onClick={openBTTerminal}>
-          MV
-        </button>
-      )}
+    <div className="bt-chat-interface">
+      <div className="bt-chat-interface__header">
+        <span />
+        <span />
+        <span />
+        <strong>marvin.agent</strong>
+        <em>LINK: LOCAL MOCK</em>
+        <button type="button" onClick={closeBTTerminal}>HIDE</button>
+      </div>
 
-      {isBTTerminalOpen && (
-        <div className="bt-global-terminal__panel">
-          <div className="bt-global-terminal__bar">
-            <span />
-            <span />
-            <span />
-            <strong>marvin.agent</strong>
-            <em>LINK: LOCAL MOCK</em>
-            <button type="button" onClick={closeBTTerminal} aria-label="Collapse Marvin terminal">
-              HIDE
-            </button>
-          </div>
-
-          <div className="bt-global-terminal__body">
-            <aside className="bt-global-terminal__sidebar" aria-label="Marvin status">
-              <div className="bt-global-terminal__eye" />
-              <div>
-                <div className="bt-global-terminal__protocol">MARVIN ONLINE</div>
-                <div className="bt-global-terminal__chips">
-                  <span>MARVIN</span>
-                  <span>MRVN</span>
-                </div>
-              </div>
-            </aside>
-
-            <div className="bt-global-terminal__console">
-              <div className="bt-global-terminal__messages">
-                {messages.map((message, index) => (
-                  <div key={`${message.source}-${index}`} className="bt-global-terminal__message">
-                    <span>{message.source}</span>
-                    <p>{message.text}</p>
-                  </div>
-                ))}
-              </div>
-
-              <form className="bt-global-terminal__input" onSubmit={handleSubmit}>
-                <label htmlFor="bt-global-command">$</label>
-                <input
-                  id="bt-global-command"
-                  placeholder={isSending ? 'Marvin is thinking...' : 'type a message for Marvin...'}
-                  value={draft}
-                  onChange={(event) => setDraft(event.target.value)}
-                  disabled={isSending}
-                />
-              </form>
+      <div className="bt-chat-interface__body">
+        <div className="bt-chat-interface__messages">
+          {messages.map((message, index) => (
+            <div key={`${message.source}-${index}`} className="bt-chat-interface__message">
+              <span className={`bt-chat-interface__source bt-chat-interface__source--${message.source.toLowerCase()}`}>
+                {message.source}
+              </span>
+              <p>{message.text}</p>
             </div>
-          </div>
+          ))}
         </div>
-      )}
-    </aside>
+
+        <form className="bt-chat-interface__input" onSubmit={handleSubmit}>
+          <label htmlFor="bt-command">$</label>
+          <input
+            id="bt-command"
+            placeholder={isSending ? 'Marvin is thinking...' : 'type a message...'}
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            disabled={isSending}
+          />
+        </form>
+      </div>
+    </div>
   )
 }
 

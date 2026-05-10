@@ -1,0 +1,98 @@
+.bt-chat-interface {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f5f2eb;
+}
+
+.bt-chat-interface__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #2a2a2a;
+  color: #f5f2eb;
+  font-size: 12px;
+}
+
+.bt-chat-interface__header button {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #f5f2eb;
+  cursor: pointer;
+}
+
+.bt-chat-interface__header button:hover {
+  text-decoration: underline;
+}
+
+.bt-chat-interface__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bt-chat-interface__messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.bt-chat-interface__message {
+  margin-bottom: 12px;
+}
+
+.bt-chat-interface__source {
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.bt-chat-interface__source--marvin {
+  color: #2a2a2a;
+}
+
+.bt-chat-interface__source--you {
+  color: #666;
+  display: block;
+  text-align: right;
+}
+
+.bt-chat-interface__source--sys,
+.bt-chat-interface__source--log {
+  color: #888;
+}
+
+.bt-chat-interface__message p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.bt-chat-interface__input {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-top: 2px solid #2a2a2a;
+  background: #fff;
+}
+
+.bt-chat-interface__input label {
+  margin-right: 8px;
+  font-size: 12px;
+}
+
+.bt-chat-interface__input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  background: transparent;
+}
+
+.bt-chat-interface__input input::placeholder {
+  color: #999;
+}
