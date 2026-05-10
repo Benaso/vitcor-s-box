@@ -5,7 +5,7 @@ import Projects from './pages/Projects'
 import Blog from './pages/Blog'
 import Hobbies from './pages/Hobbies'
 import Layout from './components/Layout'
-import KnowledgeGraph from './components/KnowledgeGraph'
+import { AvatarRevealProvider } from './components/AvatarRevealContext'
 import { BTTerminalProvider } from './components/BTTerminalContext'
 import PixelRouteTransition from './components/PixelRouteTransition'
 import { RouteTransitionProvider } from './components/RouteTransitionContext'
@@ -17,20 +17,18 @@ function App() {
       <HashRouter>
         <RouteTransitionProvider>
           <BTTerminalProvider>
-            <Routes>
-              <Route path="/about" element={<KnowledgeGraph />} />
-              <Route path="*" element={
-                <Layout>
-                  <PixelRouteTransition />
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/projects" element={<Projects />} />
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="/hobbies" element={<Hobbies />} />
-                  </Routes>
-                </Layout>
-              } />
-            </Routes>
+            <AvatarRevealProvider>
+              <Layout>
+                <PixelRouteTransition />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/projects" element={<Projects />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/hobbies" element={<Hobbies />} />
+                </Routes>
+              </Layout>
+            </AvatarRevealProvider>
           </BTTerminalProvider>
         </RouteTransitionProvider>
       </HashRouter>

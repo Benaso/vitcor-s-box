@@ -79,6 +79,10 @@ a {
   gap: 12px;
 }
 
+.site-nav.is-language-only .site-nav__panel {
+  display: flex;
+}
+
 .language-switcher {
   display: flex;
   align-items: center;
@@ -1617,6 +1621,16 @@ a {
     background: var(--color-bg);
     border: var(--border-width) solid var(--color-border);
     box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-border);
+  }
+
+  .site-nav.is-language-only .site-nav__panel {
+    position: static;
+    width: auto;
+    display: flex;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
   }
 
   .site-nav.is-open .site-nav__panel {

@@ -355,8 +355,8 @@ export default function KnowledgeGraph() {
       />
       {selectedNode && (
         <div style={{
-          position: 'fixed',
-          bottom: 20,
+          position: 'absolute',
+          bottom: 80,
           left: 20,
           padding: '12px 16px',
           border: '4px solid #2a2a2a',
@@ -364,14 +364,14 @@ export default function KnowledgeGraph() {
           background: '#f5f2eb',
           fontSize: '12px',
           fontFamily: 'monospace',
-          zIndex: 1000
+          zIndex: 10
         }}>
           <strong style={{ color: '#2a2a2a' }}>// </strong> {nodesRef.current.find(n => n.id === selectedNode)?.name}
         </div>
       )}
       <div style={{
-        position: 'fixed',
-        bottom: 20,
+        position: 'absolute',
+        bottom: 80,
         right: 20,
         padding: '8px 12px',
         border: '2px solid #2a2a2a',

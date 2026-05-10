@@ -12,10 +12,11 @@ const codePool = [
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 ]
 
-function ParticleBackground({ mousePos, hideAtRef }) {
+function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
   const canvasRef = useRef(null)
   const imageRef = useRef(null)
   const mousePosRef = useRef(mousePos)
+  const disperseRef = useRef(false)
 
   useEffect(() => {
     mousePosRef.current = mousePos
@@ -262,6 +263,11 @@ function ParticleBackground({ mousePos, hideAtRef }) {
         typeof titleTop === 'number'
         && avatarBottom + avatarLayout.disperseTriggerOffset >= titleTop
       )
+
+      if (disperseRef.current !== shouldDisperseAvatar) {
+        disperseRef.current = shouldDisperseAvatar
+        onDisperseChange?.(shouldDisperseAvatar)
+      }
 
       particles.forEach(p => {
         const { x, y, type } = mousePosRef.current

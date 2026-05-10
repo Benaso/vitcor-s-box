@@ -10,7 +10,18 @@ export async function fetchApi(path, options) {
   })
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`)
+    let message = `API request failed: ${response.status}`
+
+    try {
+      const errorBody = await response.json()
+      if (errorBody?.message) {
+        message = errorBody.message
+      }
+    } catch {
+      // Keep the status-based fallback when the backend does not return JSON.
+    }
+
+    throw new Error(message)
   }
 
   return response.json()
@@ -22,4 +33,11 @@ export function fetchSiteContent() {
 
 export function fetchGraphData() {
   return fetchApi('/graph')
+}
+
+export function postMarvinMessage(message, history) {
+  return fetchApi('/agent/marvin', {
+    method: 'POST',
+    body: JSON.stringify({ message, history })
+  })
 }

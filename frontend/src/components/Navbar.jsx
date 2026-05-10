@@ -1,11 +1,13 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import PixelButton from './PixelButton'
+import { useAvatarReveal } from './AvatarRevealContext'
 import { useLanguage } from '../i18n/LanguageContext'
 import { useState } from 'react'
 import { useRouteTransition } from './RouteTransitionContext'
 
 function Navbar() {
   const { language, languages, setLanguage, t } = useLanguage()
+  const { isAvatarRevealed } = useAvatarReveal()
   const { isRouteTransitioning, startRouteTransition } = useRouteTransition()
   const location = useLocation()
   const navigate = useNavigate()
@@ -36,27 +38,32 @@ function Navbar() {
     { to: '/hobbies', label: t.nav.hobbies },
     { to: '/about', label: t.nav.about }
   ]
+  const shouldShowOnlyLanguage = location.pathname === '/' && !isAvatarRevealed
 
   return (
-    <nav className={`site-nav ${isMenuOpen ? 'is-open' : ''}`}>
-      <Link
-        className="site-nav__brand"
-        to="/"
-        aria-disabled={isRouteTransitioning}
-        onClick={(event) => handleNavClick(event, navItems[0])}
-      >
-        MOON.DEV
-      </Link>
-      <button
-        className="site-nav__toggle"
-        type="button"
-        aria-expanded={isMenuOpen}
-        onClick={() => setIsMenuOpen((current) => !current)}
-      >
-        MENU
-      </button>
+    <nav className={`site-nav ${isMenuOpen ? 'is-open' : ''} ${shouldShowOnlyLanguage ? 'is-language-only' : ''}`}>
+      {!shouldShowOnlyLanguage && (
+        <>
+          <Link
+            className="site-nav__brand"
+            to="/"
+            aria-disabled={isRouteTransitioning}
+            onClick={(event) => handleNavClick(event, navItems[0])}
+          >
+            MOON.DEV
+          </Link>
+          <button
+            className="site-nav__toggle"
+            type="button"
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((current) => !current)}
+          >
+            MENU
+          </button>
+        </>
+      )}
       <div className="site-nav__panel">
-        {navItems.map((item) => (
+        {!shouldShowOnlyLanguage && navItems.map((item) => (
           <Link
             key={item.to}
             to={item.to}

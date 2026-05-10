@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { postMarvinMessage } from '../api/client'
 import { useBTTerminal } from './BTTerminalContext'
 
 const initialMessages = [
@@ -6,10 +7,6 @@ const initialMessages = [
   { source: 'SYS', text: 'Claude SDK agent channel pending.' },
   { source: 'LOG', text: 'MRVN frame reference accepted. Handshake calibration stable.' }
 ]
-
-function createBTReply(message) {
-  return `Acknowledged. "${message}" is queued for the future Marvin agent backend.`
-}
 
 function BTGlobalTerminal() {
   const {
@@ -20,19 +17,47 @@ function BTGlobalTerminal() {
   } = useBTTerminal()
   const [messages, setMessages] = useState(initialMessages)
   const [draft, setDraft] = useState('')
+  const [isSending, setIsSending] = useState(false)
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     const text = draft.trim()
-    if (!text) return
+    if (!text || isSending) return
 
-    setMessages((current) => [
-      ...current,
-      { source: 'YOU', text },
-      { source: 'MARVIN', text: createBTReply(text) }
-    ])
+    const nextMessages = [
+      ...messages,
+      { source: 'YOU', text }
+    ]
+
+    setMessages(nextMessages)
     setDraft('')
+    setIsSending(true)
+
+    try {
+      const history = messages.map((message) => ({
+        role: message.source === 'YOU' ? 'user' : 'assistant',
+        content: message.text
+      }))
+      const result = await postMarvinMessage(text, history)
+
+      setMessages((current) => [
+        ...current,
+        { source: 'MARVIN', text: result.reply }
+      ])
+    } catch (error) {
+      setMessages((current) => [
+        ...current,
+        {
+          source: 'SYS',
+          text: error instanceof Error
+            ? error.message
+            : 'Marvin backend link failed. Check the backend logs and MiniMax key.'
+        }
+      ])
+    } finally {
+      setIsSending(false)
+    }
   }
 
   if (!isBTTerminalEnabled) {
@@ -86,9 +111,10 @@ function BTGlobalTerminal() {
                 <label htmlFor="bt-global-command">$</label>
                 <input
                   id="bt-global-command"
-                  placeholder="type a message for Marvin..."
+                  placeholder={isSending ? 'Marvin is thinking...' : 'type a message for Marvin...'}
                   value={draft}
                   onChange={(event) => setDraft(event.target.value)}
+                  disabled={isSending}
                 />
               </form>
             </div>

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { useAvatarReveal } from '../components/AvatarRevealContext'
 import ParticleBackground from '../components/ParticleBackground'
 import PixelButton from '../components/PixelButton'
 import TerminalCard from '../components/TerminalCard'
@@ -8,6 +9,7 @@ import { useLanguage } from '../i18n/LanguageContext'
 function Home() {
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000, type: 'mouse' })
   const titleRef = useRef(null)
+  const { revealAvatar } = useAvatarReveal()
   const { enableBTTerminal } = useBTTerminal()
   const { t } = useLanguage()
 
@@ -36,7 +38,15 @@ function Home() {
 
   return (
     <>
-      <ParticleBackground mousePos={mousePos} hideAtRef={titleRef} />
+      <ParticleBackground
+        mousePos={mousePos}
+        hideAtRef={titleRef}
+        onDisperseChange={(shouldDisperse) => {
+          if (shouldDisperse) {
+            revealAvatar()
+          }
+        }}
+      />
       <div className="home-page">
         <main
           className="home-hero"
