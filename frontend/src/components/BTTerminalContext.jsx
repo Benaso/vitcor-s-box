@@ -1,14 +1,16 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 const BTTerminalContext = createContext(null)
 
 export function BTTerminalProvider({ children }) {
   const [isBTTerminalEnabled, setIsBTTerminalEnabled] = useState(false)
   const [isBTTerminalOpen, setIsBTTerminalOpen] = useState(false)
+  const [isSplitMode, setIsSplitMode] = useState(false)
 
   const enableBTTerminal = useCallback(() => {
     setIsBTTerminalEnabled(true)
     setIsBTTerminalOpen(true)
+    setIsSplitMode(true)
   }, [])
 
   const openBTTerminal = useCallback(() => {
@@ -16,7 +18,11 @@ export function BTTerminalProvider({ children }) {
   }, [])
 
   const closeBTTerminal = useCallback(() => {
-    setIsBTTerminalOpen(false)
+    setIsSplitMode(false)
+    setTimeout(() => {
+      setIsBTTerminalOpen(false)
+      setIsBTTerminalEnabled(false)
+    }, 300)
   }, [])
 
   const value = useMemo(() => ({
@@ -24,8 +30,9 @@ export function BTTerminalProvider({ children }) {
     enableBTTerminal,
     isBTTerminalOpen,
     isBTTerminalEnabled,
+    isSplitMode,
     openBTTerminal
-  }), [closeBTTerminal, enableBTTerminal, isBTTerminalEnabled, isBTTerminalOpen, openBTTerminal])
+  }), [closeBTTerminal, enableBTTerminal, isBTTerminalEnabled, isBTTerminalOpen, isSplitMode, openBTTerminal])
 
   return (
     <BTTerminalContext.Provider value={value}>
