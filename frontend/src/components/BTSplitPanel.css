@@ -2,9 +2,9 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 56px;
   width: 100%;
-  height: min(52vh, 500px);
+  height: min(52vh, calc(100vh - 56px));
   display: flex;
   flex-direction: column;
   animation: slide-in 0.3s ease-out;
@@ -15,7 +15,8 @@
 }
 
 .bt-split-panel.is-collapsed {
-  transform: translateY(calc(100% - var(--bt-drawer-handle-height)));
+  bottom: calc(56px + var(--bt-drawer-handle-height));
+  transform: none;
 }
 
 .bt-split-panel__handle {

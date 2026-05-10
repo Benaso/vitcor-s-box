@@ -36,11 +36,26 @@ a {
 }
 
 .site-shell--terminal-docked {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   padding-bottom: var(--bt-drawer-handle-height);
 }
 
 .site-shell--terminal-docked .site-footer {
-  margin-bottom: var(--bt-drawer-handle-height);
+  display: none;
+}
+
+html.site-shell--terminal-docked,
+body.site-shell--terminal-docked {
+  overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.site-shell--terminal-docked .site-main {
+  height: calc(100vh - 56px - var(--bt-drawer-handle-height));
+  overflow-y: auto;
 }
 
 .site-main {
