@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom'
 import PixelButton from './PixelButton'
-import { languages } from '../i18n/translations'
 import { useLanguage } from '../i18n/LanguageContext'
 import { useState } from 'react'
 
 function Navbar() {
-  const { language, setLanguage, t } = useLanguage()
+  const { language, languages, setLanguage, t } = useLanguage()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const closeMenu = () => setIsMenuOpen(false)

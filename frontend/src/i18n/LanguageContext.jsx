@@ -1,12 +1,28 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { translations } from './translations'
+import { fetchSiteContent } from '../api/client'
+import { languages as fallbackLanguages, translations as fallbackTranslations } from './translations'
 
 const LanguageContext = createContext(null)
 const storageKey = 'myweb-language'
 
+function isObject(value) {
+  return value && typeof value === 'object' && !Array.isArray(value)
+}
+
+function mergeDeep(fallback, override) {
+  if (!isObject(fallback) || !isObject(override)) {
+    return override ?? fallback
+  }
+
+  return Object.keys({ ...fallback, ...override }).reduce((merged, key) => {
+    merged[key] = mergeDeep(fallback[key], override[key])
+    return merged
+  }, {})
+}
+
 function getInitialLanguage() {
   const savedLanguage = window.localStorage.getItem(storageKey)
-  if (savedLanguage && translations[savedLanguage]) {
+  if (savedLanguage && fallbackTranslations[savedLanguage]) {
     return savedLanguage
   }
 
@@ -18,17 +34,48 @@ function getInitialLanguage() {
 
 export function LanguageProvider({ children }) {
   const [language, setLanguage] = useState(getInitialLanguage)
+  const [siteContent, setSiteContent] = useState({
+    languages: fallbackLanguages,
+    translations: fallbackTranslations
+  })
 
   useEffect(() => {
     window.localStorage.setItem(storageKey, language)
     document.documentElement.lang = language === 'zh' ? 'zh-CN' : language
   }, [language])
 
+  useEffect(() => {
+    let isMounted = true
+
+    fetchSiteContent()
+      .then((content) => {
+        if (!isMounted) return
+
+        setSiteContent({
+          languages: content.languages ?? fallbackLanguages,
+          translations: mergeDeep(fallbackTranslations, content.translations)
+        })
+      })
+      .catch(() => {
+        if (!isMounted) return
+
+        setSiteContent({
+          languages: fallbackLanguages,
+          translations: fallbackTranslations
+        })
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
   const value = useMemo(() => ({
     language,
     setLanguage,
-    t: translations[language]
-  }), [language])
+    languages: siteContent.languages,
+    t: siteContent.translations[language] ?? fallbackTranslations.en
+  }), [language, siteContent])
 
   return (
     <LanguageContext.Provider value={value}>

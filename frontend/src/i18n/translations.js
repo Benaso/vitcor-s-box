@@ -28,7 +28,7 @@ export const translations = {
     },
     home: {
       title: 'YE DONGYU',
-      subtitle: '工业软件开发工程师 / AI Agent 开发工程师',
+      subtitle: 'AI NATIVE 工业软件开发工程师 / AI Agent 开发工程师',
       terminal: terminalLine,
       viewProjects: '查看项目'
     },

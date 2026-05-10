@@ -1,0 +1,15 @@
+{
+  "name": "victor-box",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --parallel --filter myweb-frontend --filter myweb-backend dev",
+    "dev:frontend": "pnpm --filter myweb-frontend dev",
+    "dev:backend": "pnpm --filter myweb-backend dev",
+    "build": "pnpm --filter myweb-backend build && pnpm --filter myweb-frontend build",
+    "build:frontend": "pnpm --filter myweb-frontend build",
+    "build:backend": "pnpm --filter myweb-backend build"
+  },
+  "packageManager": "pnpm@9.0.0"
+}
