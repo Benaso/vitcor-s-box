@@ -99,7 +99,7 @@ export const translations = {
       title: 'YE DONGYU',
       subtitle: 'Industrial Software Engineer / AI Agent Engineer',
       terminal: terminalLine,
-      viewProjects: 'View Projects'
+      viewProjects: 'Hi! Jarvis!'
     },
     pages: {
       about: {
@@ -168,7 +168,7 @@ export const translations = {
       title: 'YE DONGYU',
       subtitle: 'Ingenieur für Industriesoftware / AI-Agent-Entwickler',
       terminal: terminalLine,
-      viewProjects: 'Projekte ansehen'
+      viewProjects: 'Hallo! Jarvis!'
     },
     pages: {
       about: {
