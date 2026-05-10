@@ -1,5 +1,12 @@
 import { useEffect, useRef } from 'react'
 
+const codePool = [
+  '{', '}', '[', ']', '(', ')', '<', '>', '/', '*', ';',
+  'const', 'let', 'var', 'function', 'if', 'else', 'return',
+  '=>', '===', '!==', '&&', '||', '++', '--',
+  '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+]
+
 function ParticleBackground({ mousePos, hideAtRef }) {
   const canvasRef = useRef(null)
   const imageRef = useRef(null)
@@ -129,6 +136,40 @@ function ParticleBackground({ mousePos, hideAtRef }) {
         ctx.globalAlpha = this.opacity
         ctx.fillRect(this.x - this.size / 2, this.y - this.size / 2, this.size, this.size)
         ctx.globalAlpha = 1
+      }
+    }
+
+    class CodeParticle {
+      constructor(x, y, text) {
+        this.originX = x
+        this.originY = y
+        this.x = x
+        this.y = y
+        this.codeText = text
+        this.opacity = 0
+        this.maxOpacity = 0.5
+        this.floatSpeed = 0.3 + Math.random() * 0.5
+        this.amplitude = 20 + Math.random() * 40
+        this.phase = Math.random() * Math.PI * 2
+        this.size = 14
+        this.speedX = 0.2 + Math.random() * 0.3
+      }
+
+      update(shouldAppear) {
+        if (shouldAppear) {
+          this.opacity += (this.maxOpacity - this.opacity) * 0.008
+        }
+
+        this.phase += this.floatSpeed * 0.05
+        this.y += Math.sin(this.phase) * 0.8
+        this.x += Math.cos(this.phase * 0.5) * this.speedX
+      }
+
+      draw() {
+        if (this.opacity < 0.02) return
+        ctx.font = `${this.size}px monospace`
+        ctx.fillStyle = `rgba(42, 42, 42, ${this.opacity})`
+        ctx.fillText(this.codeText, this.x, this.y)
       }
     }
 
