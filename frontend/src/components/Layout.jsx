@@ -1,17 +1,18 @@
 import Navbar from './Navbar'
 import Footer from './Footer'
-import BTGlobalTerminal from './BTGlobalTerminal'
+import BTSplitPanel from './BTSplitPanel'
+import { useBTTerminal } from './BTTerminalContext'
 
 function Layout({ children }) {
+  const { isSplitMode } = useBTTerminal()
+
   return (
-    <div
-      className="site-shell"
-    >
+    <div className={`site-shell ${isSplitMode ? 'site-shell--split' : ''}`}>
       <Navbar />
       <main className="site-main">
         {children}
       </main>
-      <BTGlobalTerminal />
+      <BTSplitPanel />
       <Footer />
     </div>
   )
