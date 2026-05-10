@@ -30,7 +30,7 @@ export const translations = {
       title: 'YE DONGYU',
       subtitle: 'AI NATIVE 工业软件开发工程师 / AI Agent 开发工程师',
       terminal: terminalLine,
-      viewProjects: '查看项目'
+      viewProjects: '嗨！贾维斯！'
     },
     pages: {
       about: {
