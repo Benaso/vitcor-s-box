@@ -163,8 +163,14 @@ function ParticleBackground({ mousePos, hideAtRef }) {
         }
 
         this.phase += this.floatSpeed * 0.05
-        this.y += Math.sin(this.phase) * 0.8
-        this.x += Math.cos(this.phase * 0.5) * this.speedX
+        this.y += Math.sin(this.phase) * this.amplitude * 0.02
+        this.x += Math.cos(this.phase * 0.5) * this.amplitude * 0.015
+
+        // 边界检测 - 环绕屏幕
+        if (this.x < -50) this.x = canvas.width + 50
+        if (this.x > canvas.width + 50) this.x = -50
+        if (this.y < -50) this.y = canvas.height + 50
+        if (this.y > canvas.height + 50) this.y = -50
       }
 
       draw() {
@@ -230,14 +236,12 @@ function ParticleBackground({ mousePos, hideAtRef }) {
         }
       }
 
-      // 初始化 code 粒子
-      const codeCount = window.innerWidth >= 1024 ? 25 : window.innerWidth >= 768 ? 20 : 15
+      // 初始化 code 粒子 - 遍布整个页面
+      const codeCount = window.innerWidth >= 1024 ? 40 : window.innerWidth >= 768 ? 30 : 20
       for (let i = 0; i < codeCount; i++) {
         const text = codePool[Math.floor(Math.random() * codePool.length)]
-        const angle = Math.random() * Math.PI * 2
-        const distance = 100 + Math.random() * 200
-        const startX = centerX + Math.cos(angle) * distance
-        const startY = centerY + Math.sin(angle) * distance
+        const startX = Math.random() * canvas.width
+        const startY = Math.random() * canvas.height
         codeParticles.push(new CodeParticle(startX, startY, text))
       }
     }
