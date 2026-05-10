@@ -31,10 +31,10 @@ function Navbar() {
 
   const navItems = [
     { to: '/', label: t.nav.home },
-    { to: '/about', label: t.nav.about },
     { to: '/projects', label: t.nav.projects },
     { to: '/blog', label: t.nav.blog },
-    { to: '/hobbies', label: t.nav.hobbies }
+    { to: '/hobbies', label: t.nav.hobbies },
+    { to: '/about', label: t.nav.about }
   ]
 
   return (
