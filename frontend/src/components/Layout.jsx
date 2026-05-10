@@ -1,5 +1,6 @@
 import Navbar from './Navbar'
 import Footer from './Footer'
+import BTGlobalTerminal from './BTGlobalTerminal'
 
 function Layout({ children }) {
   return (
@@ -10,6 +11,7 @@ function Layout({ children }) {
       <main className="site-main">
         {children}
       </main>
+      <BTGlobalTerminal />
       <Footer />
     </div>
   )

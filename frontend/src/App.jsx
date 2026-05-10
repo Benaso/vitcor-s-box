@@ -5,6 +5,8 @@ import Projects from './pages/Projects'
 import Blog from './pages/Blog'
 import Hobbies from './pages/Hobbies'
 import Layout from './components/Layout'
+import KnowledgeGraph from './components/KnowledgeGraph'
+import { BTTerminalProvider } from './components/BTTerminalContext'
 import PixelRouteTransition from './components/PixelRouteTransition'
 import { RouteTransitionProvider } from './components/RouteTransitionContext'
 import { LanguageProvider } from './i18n/LanguageContext'
@@ -14,16 +16,22 @@ function App() {
     <LanguageProvider>
       <HashRouter>
         <RouteTransitionProvider>
-          <Layout>
-            <PixelRouteTransition />
+          <BTTerminalProvider>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/hobbies" element={<Hobbies />} />
+              <Route path="/about" element={<KnowledgeGraph />} />
+              <Route path="*" element={
+                <Layout>
+                  <PixelRouteTransition />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/projects" element={<Projects />} />
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/hobbies" element={<Hobbies />} />
+                  </Routes>
+                </Layout>
+              } />
             </Routes>
-          </Layout>
+          </BTTerminalProvider>
         </RouteTransitionProvider>
       </HashRouter>
     </LanguageProvider>

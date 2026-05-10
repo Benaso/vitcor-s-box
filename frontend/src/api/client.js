@@ -19,3 +19,7 @@ export async function fetchApi(path, options) {
 export function fetchSiteContent() {
   return fetchApi('/site')
 }
+
+export function fetchGraphData() {
+  return fetchApi('/graph')
+}

@@ -2,12 +2,18 @@ import { useRef, useState } from 'react'
 import ParticleBackground from '../components/ParticleBackground'
 import PixelButton from '../components/PixelButton'
 import TerminalCard from '../components/TerminalCard'
+import { useBTTerminal } from '../components/BTTerminalContext'
 import { useLanguage } from '../i18n/LanguageContext'
 
 function Home() {
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000, type: 'mouse' })
   const titleRef = useRef(null)
+  const { enableBTTerminal } = useBTTerminal()
   const { t } = useLanguage()
+
+  const handleEmbark = () => {
+    enableBTTerminal()
+  }
 
   const handlePointerMove = (event) => {
     setMousePos({
@@ -47,7 +53,9 @@ function Home() {
 
           <TerminalCard command={t.home.terminal} />
 
-          <PixelButton>{t.home.viewProjects}</PixelButton>
+          <PixelButton onClick={handleEmbark}>
+            {t.home.viewProjects}
+          </PixelButton>
         </main>
       </div>
     </>

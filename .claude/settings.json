@@ -19,7 +19,26 @@
       "Bash(cargo run *)",
       "Bash(curl -s http://127.0.0.1:8080/api/home)",
       "Bash(pnpm build *)",
-      "Bash(gh --version)"
+      "Bash(gh --version)",
+      "Bash(pkill -f \"tsx\")",
+      "Bash(pkill -f \"node.*server\")",
+      "Bash(taskkill //F //PID 22052)",
+      "Bash(pkill -f \"node\")",
+      "Bash(taskkill //F //PID 13572)",
+      "Bash(curl -v http://localhost:4000/api/graph)",
+      "Bash(pkill -9 -f \"tsx|node.*4000\")",
+      "Bash(awk '{print $5}')",
+      "Bash(taskkill //F //PID 17032)",
+      "Bash(curl -s http://localhost:4000/api/site)",
+      "Bash(PORT=4001 node dist/server.js)",
+      "Bash(curl -s http://localhost:4001/api/graph)",
+      "Bash(taskkill //F //PID 10600)",
+      "Bash(pkill -9 -f \"node\")",
+      "Bash(pkill -f \"node|tsx\")",
+      "Bash(PORT=4000 node dist/server.js)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(node --check src/components/KnowledgeGraph.jsx)",
+      "Bash(npx acorn *)"
     ]
   }
 }

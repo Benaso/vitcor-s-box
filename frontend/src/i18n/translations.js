@@ -30,7 +30,7 @@ export const translations = {
       title: 'YE DONGYU',
       subtitle: 'AI NATIVE 工业软件开发工程师 / AI Agent 开发工程师',
       terminal: terminalLine,
-      viewProjects: '嗨！BT-7274！'
+      viewProjects: '嗨！马文！'
     },
     pages: {
       about: {
@@ -99,7 +99,7 @@ export const translations = {
       title: 'YE DONGYU',
       subtitle: 'Industrial Software Engineer / AI Agent Engineer',
       terminal: terminalLine,
-      viewProjects: 'Hi! BT-7274!'
+      viewProjects: 'Hi! Marvin!'
     },
     pages: {
       about: {
@@ -168,7 +168,7 @@ export const translations = {
       title: 'YE DONGYU',
       subtitle: 'Ingenieur für Industriesoftware / AI-Agent-Entwickler',
       terminal: terminalLine,
-      viewProjects: 'Hallo! BT-7274!'
+      viewProjects: 'Hallo! Marvin!'
     },
     pages: {
       about: {

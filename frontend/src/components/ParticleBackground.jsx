@@ -1,24 +1,14 @@
 import { useEffect, useRef } from 'react'
 
 const codePool = [
-  // 符号
   '{', '}', '[', ']', '(', ')', '<', '>', '/', '*', ';', ':', '"', "'",
-  // JS/TS 关键字
   'const', 'let', 'var', 'function', 'if', 'else', 'return', 'async', 'await',
   '=>', '===', '!==', '&&', '||', '++', '--', 'import', 'export', 'from',
-  // Rust 关键字
   'fn', 'let', 'mut', 'pub', 'impl', 'trait', 'struct', 'enum', 'match',
   'Option', 'Result', 'Some', 'None', 'Ok', 'Err', 'unwrap', 'expect',
-  'move', 'where', 'self', 'Self', 'async', 'await',
-  // Go 关键字
   'func', 'go', 'defer', 'chan', 'goroutine', 'interface', 'map', 'make',
   'package', 'import', 'return', 'nil', 'true', 'false', 'append', 'range',
-  'struct', 'type', 'error', 'defer', 'select', 'case',
-  // Java 关键字
   'public', 'private', 'class', 'static', 'void', 'int', 'String', 'new',
-  'try', 'catch', 'finally', 'throw', 'extends', 'implements', 'interface',
-  'abstract', 'final', 'synchronized', 'volatile',
-  // 数字
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 ]
 
@@ -37,7 +27,6 @@ function ParticleBackground({ mousePos, hideAtRef }) {
     let animationId
     let particles = []
     let codeParticles = []
-    let codeAppearProgress = 0
     let imageLoaded = false
     let avatarCenter = null
 
@@ -181,7 +170,6 @@ function ParticleBackground({ mousePos, hideAtRef }) {
         this.y += Math.sin(this.phase) * this.amplitude * 0.02
         this.x += Math.cos(this.phase * 0.5) * this.amplitude * 0.015
 
-        // 边界检测 - 环绕屏幕
         if (this.x < -50) this.x = canvas.width + 50
         if (this.x > canvas.width + 50) this.x = -50
         if (this.y < -50) this.y = canvas.height + 50
@@ -251,7 +239,7 @@ function ParticleBackground({ mousePos, hideAtRef }) {
         }
       }
 
-      // 初始化 code 粒子 - 遍布整个页面
+      // 初始化 code 粒子
       const codeCount = window.innerWidth >= 1024 ? 40 : window.innerWidth >= 768 ? 30 : 20
       for (let i = 0; i < codeCount; i++) {
         const text = codePool[Math.floor(Math.random() * codePool.length)]
