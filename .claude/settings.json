@@ -38,7 +38,13 @@
       "Bash(PORT=4000 node dist/server.js)",
       "Bash(taskkill //F //IM node.exe)",
       "Bash(node --check src/components/KnowledgeGraph.jsx)",
-      "Bash(npx acorn *)"
+      "Bash(npx acorn *)",
+      "Bash(git reset *)",
+      "Bash(curl -s http://localhost:3001)",
+      "Bash(python -m http.server 3001)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/demo-agent-animation.html)",
+      "Bash(node -e \"const http=require\\('http'\\),fs=require\\('fs'\\);http.createServer\\(\\(req,res\\)=>{res.writeHead\\(200,{'Content-Type':'text/html'}\\);res.end\\(fs.readFileSync\\('./demo-agent-animation.html'\\)\\)}\\).listen\\(3001,\\(\\)=>console.log\\('Server running on http://localhost:3001'\\)\\)\")",
+      "Bash(node -e \"const http=require\\('http'\\),fs=require\\('fs'\\);http.createServer\\(\\(req,res\\)=>{res.writeHead\\(200,{'Content-Type':'text/html'}\\);res.end\\(fs.readFileSync\\('./demo-agent-animation.html'\\)\\)}\\).listen\\(3001,\\(\\)=>console.log\\('Server on http://localhost:3001'\\)\\)\")"
     ]
   }
 }

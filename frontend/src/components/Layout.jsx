@@ -4,10 +4,15 @@ import BTSplitPanel from './BTSplitPanel'
 import { useBTTerminal } from './BTTerminalContext'
 
 function Layout({ children }) {
-  const { isSplitMode } = useBTTerminal()
+  const { isBTTerminalEnabled, isBTTerminalOpen, isSplitMode } = useBTTerminal()
+  const shellClassName = [
+    'site-shell',
+    isSplitMode ? 'site-shell--split' : '',
+    isBTTerminalEnabled && !isBTTerminalOpen ? 'site-shell--terminal-docked' : ''
+  ].filter(Boolean).join(' ')
 
   return (
-    <div className={`site-shell ${isSplitMode ? 'site-shell--split' : ''}`}>
+    <div className={shellClassName}>
       <Navbar />
       <main className="site-main">
         {children}

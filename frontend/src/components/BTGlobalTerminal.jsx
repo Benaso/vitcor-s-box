@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { postMarvinMessage } from '../api/client'
-import { useBTTerminal } from './BTTerminalContext'
 
 const initialMessages = [
   { source: 'MARVIN', text: 'Marvin online. Standing by with cheerful mechanical patience.' },
@@ -9,7 +8,6 @@ const initialMessages = [
 ]
 
 function BTGlobalTerminal() {
-  const { closeBTTerminal } = useBTTerminal()
   const [messages, setMessages] = useState(initialMessages)
   const [draft, setDraft] = useState('')
   const [isSending, setIsSending] = useState(false)
@@ -58,15 +56,18 @@ function BTGlobalTerminal() {
   return (
     <div className="bt-chat-interface">
       <div className="bt-chat-interface__header">
-        <span />
-        <span />
-        <span />
-        <strong>marvin.agent</strong>
-        <em>LINK: LOCAL MOCK</em>
-        <button type="button" onClick={closeBTTerminal}>HIDE</button>
+        <div className="bt-chat-interface__title">
+          <strong>marvin boot</strong>
+          <em>/agent/local</em>
+        </div>
       </div>
 
       <div className="bt-chat-interface__body">
+        <div className="bt-chat-interface__notice">
+          <span>GUEST: MRVN</span>
+          <span>MODE: SAFE BOOT</span>
+          <span>DISPLAY: TTY0</span>
+        </div>
         <div className="bt-chat-interface__messages">
           {messages.map((message, index) => (
             <div key={`${message.source}-${index}`} className="bt-chat-interface__message">
@@ -82,7 +83,7 @@ function BTGlobalTerminal() {
           <label htmlFor="bt-command">$</label>
           <input
             id="bt-command"
-            placeholder={isSending ? 'Marvin is thinking...' : 'type a message...'}
+            placeholder={isSending ? 'executing request...' : 'type command or message'}
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
             disabled={isSending}

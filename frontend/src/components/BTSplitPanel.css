@@ -1,46 +1,84 @@
 .bt-split-panel {
   position: fixed;
-  top: var(--nav-height, 76px);
+  left: 0;
   right: 0;
   bottom: 0;
-  width: 40%;
+  width: 100%;
+  height: min(52vh, 500px);
   display: flex;
+  flex-direction: column;
   animation: slide-in 0.3s ease-out;
-  z-index: 100;
+  z-index: 140;
+  padding: 0;
+  pointer-events: none;
+  transition: transform 220ms ease-out;
 }
 
-.bt-split-panel__divider {
-  width: 4px;
-  background: #2a2a2a;
+.bt-split-panel.is-collapsed {
+  transform: translateY(calc(100% - var(--bt-drawer-handle-height)));
 }
 
-.bt-split-panel__agent {
+.bt-split-panel__handle {
+  width: 100%;
+  height: var(--bt-drawer-handle-height);
+  flex: 0 0 var(--bt-drawer-handle-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: var(--border-width) solid var(--color-border);
+  border-bottom: 0;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.bt-split-panel__handle:active {
+  background: #fff;
+}
+
+.bt-split-panel__handle strong {
+  font-size: 12px;
+}
+
+.bt-shell-panel {
+  position: relative;
   flex: 1;
-  background: #f5f2eb;
+  min-height: 0;
+  width: 100%;
+  margin: 0;
+  background: #fff;
+  border: var(--border-width) solid var(--color-border);
+  pointer-events: auto;
   overflow: hidden;
 }
 
+.bt-shell-panel__refresh {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: #fff;
+  animation: bt-shell-refresh 220ms ease-out forwards;
+}
+
 @keyframes slide-in {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes bt-shell-refresh {
+  0% { opacity: 0; }
+  35% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 @media (max-width: 1023px) {
   .bt-split-panel {
-    top: 50%;
-    left: 0;
-    right: 0;
-    width: 100%;
     height: 50%;
-    flex-direction: column;
-  }
-
-  .bt-split-panel__divider {
-    width: 100%;
-    height: 4px;
+    padding: 0;
   }
 }

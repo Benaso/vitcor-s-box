@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent 唤起动画 Demo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #f5f2eb;
+      font-family: 'Courier New', monospace;
+      padding: 40px;
+    }
+    h1 {
+      color: #2a2a2a;
+      font-size: 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .demo-card {
+      background: #fff;
+      border: 4px solid #2a2a2a;
+      box-shadow: 6px 6px 0 #2a2a2a;
+      padding: 16px;
+    }
+    .demo-card h2 {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #2a2a2a;
+    }
+    .demo-stage {
+      width: 100%;
+      height: 200px;
+      background: #f5f2eb;
+      border: 2px solid #2a2a2a;
+      position: relative;
+      overflow: hidden;
+    }
+    .demo-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: #2a2a2a;
+      color: #f5f2eb;
+      border: none;
+      padding: 8px 16px;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* 方案1: 粒子重组 */
+    #particle-morph .avatar-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #2a2a2a;
+    }
+    #particle-morph.active .avatar-particle {
+      animation: particle-morph 1.5s ease-in-out forwards;
+    }
+    @keyframes particle-morph {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(var(--tx), var(--ty)) scale(2); }
+      100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+    }
+    #particle-morph .morph-panel {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 120px;
+      height: 80px;
+      border: 3px solid #2a2a2a;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+    #particle-morph.active .morph-panel {
+      animation: panel-pop 0.4s 1.3s ease-out forwards;
+    }
+    @keyframes panel-pop {
+      0% { transform: translate(-50%, -50%) scale(0); }
+      70% { transform: translate(-50%, -50%) scale(1.1); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    /* 方案2: 代码引力坍缩 */
+    #code-collapse .code-char {
+      position: absolute;
+      font-size: 12px;
+      color: #2a2a2a;
+      opacity: 0.6;
+    }
+    #code-collapse.active .code-char {
+      animation: code-fall 1s ease-in forwards;
+    }
+    @keyframes code-fall {
+      0% { transform: translate(0, 0); opacity: 0.6; }
+      100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+    }
+    #code-collapse .collapsed-panel {
+      position: absolute;
+      width: 100px;
+      height: 70px;
+      border: 3px solid #2a2a2a;
+      background: #fff;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+    #code-collapse.active .collapsed-panel {
+      animation: panel-appear 0.6s 0.9s ease-out forwards;
+    }
+    @keyframes panel-appear {
+      0% { transform: translate(-50%, -50%) scale(0) rotate(-10deg); }
+      100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    }
+
+    /* 方案3: 启动序列 */
+    #boot-sequence .boot-screen {
+      position: absolute;
+      inset: 0;
+      background: #f5f2eb;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      font-size: 11px;
+      line-height: 2;
+    }
+    #boot-sequence .boot-screen .line {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    #boot-sequence.active .boot-screen .line:nth-child(1) { animation: boot-line 0.3s 0.2s forwards; }
+    #boot-sequence.active .boot-screen .line:nth-child(2) { animation: boot-line 0.3s 0.5s forwards; }
+    #boot-sequence.active .boot-screen .line:nth-child(3) { animation: boot-line 0.3s 0.8s forwards; }
+    #boot-sequence.active .boot-screen .line:nth-child(4) { animation: boot-line 0.3s 1.1s forwards; }
+    #boot-sequence.active .boot-screen .line:nth-child(5) { animation: boot-line 0.3s 1.4s forwards; }
+    #boot-sequence.active .boot-screen .line:nth-child(6) { animation: boot-line 0.3s 1.7s forwards; }
+    @keyframes boot-line {
+      0% { opacity: 0; transform: translateX(-20px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    #boot-sequence .terminal-panel {
+      position: absolute;
+      inset: 0;
+      background: #f5f2eb;
+      border: 2px solid #2a2a2a;
+      display: none;
+    }
+    #boot-sequence.active .boot-screen { display: none; }
+    #boot-sequence.active .terminal-panel {
+      display: flex;
+      animation: fade-in 0.5s 2.2s forwards;
+      opacity: 0;
+    }
+    @keyframes fade-in {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    /* 方案4: 全息投影 */
+    #hologram .holo-panel {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 120px;
+      height: 90px;
+      border: 2px solid #2a2a2a;
+      background: rgba(255,255,255,0.85);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+    #hologram.active .holo-panel {
+      display: flex;
+      animation: holo-appear 0.6s ease-out forwards;
+    }
+    @keyframes holo-appear {
+      0% { transform: translate(-50%, -50%) scale(0) rotate(10deg); opacity: 0; }
+      50% { transform: translate(-50%, -50%) scale(1.05) rotate(-2deg); }
+      100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+    }
+    #hologram.active .holo-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(transparent 50%, rgba(42,42,42,0.05) 50%);
+      background-size: 100% 4px;
+      animation: scanline 0.15s linear infinite;
+    }
+    @keyframes scanline {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 4px; }
+    }
+
+    /* 方案5: 命令行构建 */
+    #cmd-materialize .cmd-lines {
+      position: absolute;
+      inset: 0;
+      padding: 12px;
+      font-size: 11px;
+    }
+    #cmd-materialize .cmd-line {
+      opacity: 0;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    #cmd-materialize.active .cmd-line:nth-child(1) { animation: type-line 0.4s 0.2s forwards; }
+    #cmd-materialize.active .cmd-line:nth-child(2) { animation: type-line 0.4s 0.7s forwards; }
+    #cmd-materialize.active .cmd-line:nth-child(3) { animation: type-line 0.4s 1.2s forwards; }
+    #cmd-materialize.active .cmd-line:nth-child(4) { animation: type-line 0.4s 1.7s forwards; }
+    @keyframes type-line {
+      0% { opacity: 1; width: 0; border-right: 2px solid #2a2a2a; }
+      100% { opacity: 1; width: 100%; border-right: none; }
+    }
+    #cmd-materialize .final-panel {
+      position: absolute;
+      inset: 0;
+      border: 2px solid #2a2a2a;
+      background: #fff;
+      display: none;
+    }
+    #cmd-materialize.active .cmd-lines { display: none; }
+    #cmd-materialize.active .final-panel {
+      display: flex;
+      animation: fade-in 0.5s 2.3s forwards;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>AGENT 唤起动画方案</h1>
+  <div class="demo-grid">
+    <div class="demo-card">
+      <h2>1. 粒子重组 Particle Morphing</h2>
+      <div class="demo-stage" id="particle-morph"></div>
+    </div>
+
+    <div class="demo-card">
+      <h2>2. 代码坍缩 Code Collapse</h2>
+      <div class="demo-stage" id="code-collapse"></div>
+    </div>
+
+    <div class="demo-card">
+      <h2>3. 启动序列 Boot Sequence</h2>
+      <div class="demo-stage" id="boot-sequence"></div>
+    </div>
+
+    <div class="demo-card">
+      <h2>4. 全息投影 Hologram</h2>
+      <div class="demo-stage" id="hologram"></div>
+    </div>
+
+    <div class="demo-card">
+      <h2>5. 命令行构建 Command Materialize</h2>
+      <div class="demo-stage" id="cmd-materialize"></div>
+    </div>
+  </div>
+
+  <script>
+    function init() {
+      // 方案1: 粒子
+      const stage1 = document.getElementById('particle-morph');
+      for (let i = 0; i < 25; i++) {
+        const p = document.createElement('div');
+        p.className = 'avatar-particle';
+        p.style.left = (70 + Math.random() * 60) + 'px';
+        p.style.top = (50 + Math.random() * 100) + 'px';
+        p.style.setProperty('--tx', (Math.random() * 60 - 30) + 'px');
+        p.style.setProperty('--ty', (Math.random() * 60 - 30) + 'px');
+        stage1.insertBefore(p, stage1.firstChild);
+      }
+      const panel1 = document.createElement('div');
+      panel1.className = 'morph-panel';
+      panel1.textContent = 'AGENT';
+      stage1.appendChild(panel1);
+
+      // 方案2: 代码字符
+      const stage2 = document.getElementById('code-collapse');
+      const chars = ['{', '}', '(', ')', 'const', 'let', 'fn', 'func', 'go', 'int', 'if', 'else', 'impl', 'trait'];
+      for (let i = 0; i < 18; i++) {
+        const c = document.createElement('span');
+        c.className = 'code-char';
+        c.textContent = chars[Math.floor(Math.random() * chars.length)];
+        c.style.left = Math.random() * 80 + 10 + '%';
+        c.style.top = Math.random() * 80 + 10 + '%';
+        c.style.setProperty('--tx', (Math.random() * 100 - 50) + 'px');
+        c.style.setProperty('--ty', (Math.random() * 100 - 50) + 'px');
+        stage2.insertBefore(c, stage2.firstChild);
+      }
+      const panel2 = document.createElement('div');
+      panel2.className = 'collapsed-panel';
+      panel2.textContent = 'AGENT';
+      stage2.appendChild(panel2);
+
+      // 方案3: 启动序列
+      const stage3 = document.getElementById('boot-sequence');
+      const bootScreen = document.createElement('div');
+      bootScreen.className = 'boot-screen';
+      bootScreen.innerHTML = `
+        <div class="line">> initializing marvin module...</div>
+        <div class="line">> loading personality matrix...</div>
+        <div class="line">> establishing neural link...</div>
+        <div class="line">> calibrating empathic processors...</div>
+        <div class="line">> BT-7274 protocol online</div>
+        <div class="line">> Marvin ready.</div>
+      `;
+      stage3.insertBefore(bootScreen, stage3.firstChild);
+      const panel3 = document.createElement('div');
+      panel3.className = 'terminal-panel';
+      panel3.innerHTML = '<div style="padding:8px;font-size:11px;">AGENT PANEL READY</div>';
+      stage3.appendChild(panel3);
+
+      // 方案4: 全息
+      const stage4 = document.getElementById('hologram');
+      const holoPanel = document.createElement('div');
+      holoPanel.className = 'holo-panel';
+      holoPanel.innerHTML = 'AGENT';
+      stage4.appendChild(holoPanel);
+
+      // 方案5: 命令行
+      const stage5 = document.getElementById('cmd-materialize');
+      const lines = document.createElement('div');
+      lines.className = 'cmd-lines';
+      lines.innerHTML = `
+        <div class="cmd-line">$ init marvin --personality</div>
+        <div class="cmd-line">$ load empathic_core.v2</div>
+        <div class="cmd-line">$ calibrate --mood=sarcastic</div>
+        <div class="cmd-line">$ BT-7274 online</div>
+      `;
+      stage5.insertBefore(lines, stage5.firstChild);
+      const panel5 = document.createElement('div');
+      panel5.className = 'final-panel';
+      panel5.innerHTML = '<div style="padding:8px;font-size:11px;">AGENT PANEL</div>';
+      stage5.appendChild(panel5);
+
+      // 给每个stage添加按钮
+      document.querySelectorAll('.demo-stage').forEach(stage => {
+        const btn = document.createElement('button');
+        btn.className = 'demo-btn';
+        btn.textContent = '触发';
+        btn.onclick = () => {
+          stage.classList.remove('active');
+          void stage.offsetWidth;
+          stage.classList.add('active');
+          setTimeout(() => stage.classList.remove('active'), 3500);
+        };
+        stage.appendChild(btn);
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

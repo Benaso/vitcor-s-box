@@ -14,15 +14,13 @@ export function BTTerminalProvider({ children }) {
   }, [])
 
   const openBTTerminal = useCallback(() => {
+    setIsSplitMode(true)
     setIsBTTerminalOpen(true)
   }, [])
 
   const closeBTTerminal = useCallback(() => {
     setIsSplitMode(false)
-    setTimeout(() => {
-      setIsBTTerminalOpen(false)
-      setIsBTTerminalEnabled(false)
-    }, 300)
+    setIsBTTerminalOpen(false)
   }, [])
 
   const value = useMemo(() => ({
