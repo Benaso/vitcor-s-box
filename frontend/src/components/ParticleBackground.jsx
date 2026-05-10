@@ -21,6 +21,8 @@ function ParticleBackground({ mousePos, hideAtRef }) {
     const ctx = canvas.getContext('2d')
     let animationId
     let particles = []
+    let codeParticles = []
+    let codeAppearProgress = 0
     let imageLoaded = false
     let avatarCenter = null
 
@@ -227,6 +229,17 @@ function ParticleBackground({ mousePos, hideAtRef }) {
           }
         }
       }
+
+      // 初始化 code 粒子
+      const codeCount = window.innerWidth >= 1024 ? 25 : window.innerWidth >= 768 ? 20 : 15
+      for (let i = 0; i < codeCount; i++) {
+        const text = codePool[Math.floor(Math.random() * codePool.length)]
+        const angle = Math.random() * Math.PI * 2
+        const distance = 100 + Math.random() * 200
+        const startX = centerX + Math.cos(angle) * distance
+        const startY = centerY + Math.sin(angle) * distance
+        codeParticles.push(new CodeParticle(startX, startY, text))
+      }
     }
 
     const draw = () => {
@@ -250,6 +263,13 @@ function ParticleBackground({ mousePos, hideAtRef }) {
         if (p.opacity > 0.01) {
           p.draw()
         }
+      })
+
+      // 更新和绘制 code 粒子
+      const shouldCodeAppear = hasScrolled && typeof titleTop === 'number' && avatarBottom + avatarLayout.disperseTriggerOffset >= titleTop
+      codeParticles.forEach(cp => {
+        cp.update(shouldCodeAppear)
+        cp.draw()
       })
 
       animationId = requestAnimationFrame(draw)
@@ -280,6 +300,7 @@ function ParticleBackground({ mousePos, hideAtRef }) {
       if (previousMode !== avatarMode) {
         avatarCenter = nextCenter
         imageLoaded = false
+        codeParticles = []
         loadImage()
         return
       }
