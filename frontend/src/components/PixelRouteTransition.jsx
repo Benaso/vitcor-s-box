@@ -1,50 +1,68 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useLanguage } from '../i18n/LanguageContext'
+import { useRouteTransition } from './RouteTransitionContext'
+
+const transitionDuration = 980
 
 function PixelRouteTransition() {
-  const location = useLocation()
-  const firstRenderRef = useRef(true)
   const timerRef = useRef(null)
   const [isActive, setIsActive] = useState(false)
-  const { t } = useLanguage()
-
-  const routeLabels = {
-    '/': t.routes.home,
-    '/about': t.routes.about,
-    '/projects': t.routes.projects,
-    '/blog': t.routes.blog,
-    '/hobbies': t.routes.hobbies
-  }
+  const [activeLabel, setActiveLabel] = useState('')
+  const {
+    finishRouteTransition,
+    isRouteTransitioning,
+    transitionLabel
+  } = useRouteTransition()
 
   useEffect(() => {
-    if (firstRenderRef.current) {
-      firstRenderRef.current = false
+    if (!isRouteTransitioning) {
+      setIsActive(false)
       return undefined
     }
 
-    window.clearTimeout(timerRef.current)
+    setActiveLabel(transitionLabel)
     setIsActive(true)
 
     timerRef.current = window.setTimeout(() => {
       setIsActive(false)
-    }, 760)
+      finishRouteTransition()
+    }, transitionDuration)
 
     return () => {
       window.clearTimeout(timerRef.current)
     }
-  }, [location.pathname])
+  }, [finishRouteTransition, isRouteTransitioning, transitionLabel])
+
+  useEffect(() => () => {
+    window.clearTimeout(timerRef.current)
+  }, [])
 
   return (
     <div
       className={`pixel-transition ${isActive ? 'is-active' : ''}`}
       aria-hidden="true"
     >
-      <div className="pixel-transition__frame" />
+      <div className="pixel-transition__viewfinder">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+      <div className="pixel-transition__exposure" />
+      <div className="pixel-transition__hud pixel-transition__hud--top">
+        <div className="pixel-transition__rec">
+          <span />
+          REC
+        </div>
+        <div>F-STD</div>
+      </div>
+      <div className="pixel-transition__hud pixel-transition__hud--bottom">
+        <div>00:00:03</div>
+        <div>ISO 400  F2.8</div>
+      </div>
       <div className="pixel-transition__badge">
-        <div className="pixel-transition__eyebrow">{t.transition.eyebrow}</div>
+        <div className="pixel-transition__eyebrow">FILM SIMULATION</div>
         <div className="pixel-transition__title">
-          {routeLabels[location.pathname] || t.routes.page}
+          {activeLabel}
         </div>
         <div className="pixel-transition__meter">
           {Array.from({ length: 8 }).map((_, index) => (

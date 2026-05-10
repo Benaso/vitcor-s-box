@@ -65,3 +65,7 @@
 - The pressed state should remove the hard shadow and translate the button down/right by 2-3px.
 - This applies to every button surface, including navbar items, mobile MENU, dropdown menu items, language buttons, and future action buttons.
 - Prefer pointer events for React button state so mouse, touch, and pen input behave consistently.
+
+## 开发偏好
+
+- 用户明确表示"直接开始干，只看效果"时，跳过详细设计文档，直接实现

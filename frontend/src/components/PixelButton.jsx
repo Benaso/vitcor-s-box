@@ -1,12 +1,13 @@
 import { useState } from 'react'
 
-function PixelButton({ children, onClick, variant = 'default' }) {
+function PixelButton({ children, disabled = false, onClick, variant = 'default' }) {
   const [pressed, setPressed] = useState(false)
   const isActive = variant === 'active'
 
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       onPointerDown={() => setPressed(true)}
       onPointerUp={() => setPressed(false)}
       onPointerCancel={() => setPressed(false)}
@@ -18,7 +19,8 @@ function PixelButton({ children, onClick, variant = 'default' }) {
         padding: '10px 20px',
         fontFamily: 'inherit',
         fontSize: '14px',
-        cursor: 'pointer',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.72 : 1,
         boxShadow: pressed || isActive
           ? 'none'
           : 'var(--shadow-offset) var(--shadow-offset) 0 var(--color-border)',
