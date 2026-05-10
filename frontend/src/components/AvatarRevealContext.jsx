@@ -1,14 +1,17 @@
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 const AvatarRevealContext = createContext(null)
 
 export function AvatarRevealProvider({ children }) {
   const [isAvatarRevealed, setIsAvatarRevealed] = useState(false)
+  const resetAvatarReveal = useCallback(() => setIsAvatarRevealed(false), [])
+  const revealAvatar = useCallback(() => setIsAvatarRevealed(true), [])
 
   const value = useMemo(() => ({
     isAvatarRevealed,
-    revealAvatar: () => setIsAvatarRevealed(true)
-  }), [isAvatarRevealed])
+    resetAvatarReveal,
+    revealAvatar
+  }), [isAvatarRevealed, resetAvatarReveal, revealAvatar])
 
   return (
     <AvatarRevealContext.Provider value={value}>
