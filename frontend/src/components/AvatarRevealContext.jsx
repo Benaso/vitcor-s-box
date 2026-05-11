@@ -4,14 +4,20 @@ const AvatarRevealContext = createContext(null)
 
 export function AvatarRevealProvider({ children }) {
   const [isAvatarRevealed, setIsAvatarRevealed] = useState(false)
+  const [hasEverRevealed, setHasEverRevealed] = useState(false)
+
   const resetAvatarReveal = useCallback(() => setIsAvatarRevealed(false), [])
-  const revealAvatar = useCallback(() => setIsAvatarRevealed(true), [])
+  const revealAvatar = useCallback(() => {
+    setIsAvatarRevealed(true)
+    setHasEverRevealed(true)
+  }, [])
 
   const value = useMemo(() => ({
+    hasEverRevealed,
     isAvatarRevealed,
     resetAvatarReveal,
     revealAvatar
-  }), [isAvatarRevealed, resetAvatarReveal, revealAvatar])
+  }), [hasEverRevealed, isAvatarRevealed, resetAvatarReveal, revealAvatar])
 
   return (
     <AvatarRevealContext.Provider value={value}>

@@ -35,8 +35,8 @@ export function fetchGraphData() {
   return fetchApi('/graph')
 }
 
-export function postMarvinMessage(message, history) {
-  return fetchApi('/agent/marvin', {
+export function postQiuMessage(message, history) {
+  return fetchApi('/agent/qiu', {
     method: 'POST',
     body: JSON.stringify({ message, history })
   })

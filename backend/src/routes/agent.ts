@@ -1,39 +1,39 @@
 import { Router } from 'express'
-import { askMarvin, type MarvinHistoryMessage } from '../agents/marvin.js'
+import { askQiu, type QiuHistoryMessage } from '../agents/qiu.js'
 
 const router = Router()
 
-router.get('/marvin', (_request, response) => {
+router.get('/qiu', (_request, response) => {
   response.json({
     ok: true,
     agent: {
-      id: 'marvin',
-      name: 'Marvin',
+      id: 'qiu',
+      name: 'Qiu',
       status: 'ready',
       provider: 'minimax-anthropic-sdk'
     }
   })
 })
 
-router.post('/marvin', async (request, response) => {
+router.post('/qiu', async (request, response) => {
   try {
     const message = typeof request.body?.message === 'string' ? request.body.message : ''
     const history = Array.isArray(request.body?.history)
-      ? request.body.history as MarvinHistoryMessage[]
+      ? request.body.history as QiuHistoryMessage[]
       : []
 
-    const result = await askMarvin(message, history)
+    const result = await askQiu(message, history)
 
     response.json({
       ok: true,
-      agent: 'marvin',
+      agent: 'qiu',
       ...result
     })
   } catch (error) {
     response.status(502).json({
       ok: false,
-      agent: 'marvin',
-      message: error instanceof Error ? error.message : 'Marvin agent failed'
+      agent: 'qiu',
+      message: error instanceof Error ? error.message : 'Qiu agent failed'
     })
   }
 })

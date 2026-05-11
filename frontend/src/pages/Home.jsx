@@ -1,21 +1,14 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { useAvatarReveal } from '../components/AvatarRevealContext'
 import ParticleBackground from '../components/ParticleBackground'
-import PixelButton from '../components/PixelButton'
 import TerminalCard from '../components/TerminalCard'
-import { useBTTerminal } from '../components/BTTerminalContext'
 import { useLanguage } from '../i18n/LanguageContext'
 
 function Home() {
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000, type: 'mouse' })
   const titleRef = useRef(null)
   const { isAvatarRevealed, resetAvatarReveal, revealAvatar } = useAvatarReveal()
-  const { enableBTTerminal } = useBTTerminal()
   const { t } = useLanguage()
-
-  const handleEmbark = () => {
-    enableBTTerminal()
-  }
 
   useLayoutEffect(() => {
     resetAvatarReveal()
@@ -66,12 +59,6 @@ function Home() {
           </p>
 
           <TerminalCard command={t.home.terminal} />
-
-          {isAvatarRevealed && (
-            <PixelButton onClick={handleEmbark}>
-              {t.home.viewProjects}
-            </PixelButton>
-          )}
         </main>
       </div>
     </>

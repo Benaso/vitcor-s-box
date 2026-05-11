@@ -30,7 +30,7 @@ export const siteContent = {
         title: 'YE DONGYU',
         subtitle: 'Industrial Software Engineer / AI Agent Engineer',
         terminal: terminalLine,
-        viewProjects: 'Hi! Marvin!'
+        viewProjects: 'Hi! Qiu!'
       },
       pages: {
         about: {

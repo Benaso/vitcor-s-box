@@ -1,60 +1,289 @@
-.bt-split-panel {
+/* ===== Floating Panel Container ===== */
+.bt-floating-panel {
   position: fixed;
+  top: 0;
   left: 0;
-  right: 0;
-  bottom: 56px;
-  width: 100%;
-  height: min(52vh, calc(100vh - 56px));
-  display: flex;
-  flex-direction: column;
-  animation: slide-in 0.3s ease-out;
   z-index: 140;
-  padding: 0;
   pointer-events: none;
-  transition: transform 220ms ease-out;
 }
 
-.bt-split-panel.is-collapsed {
-  bottom: calc(56px + var(--bt-drawer-handle-height));
-  transform: none;
+/* ===== Dock Zones ===== */
+.bt-dock-zone {
+  position: fixed;
+  z-index: 135;
+  pointer-events: none;
+  background: rgba(42, 42, 42, 0.04);
+  border: 2px dashed rgba(42, 42, 42, 0.12);
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.bt-split-panel__handle {
-  width: 100%;
-  height: var(--bt-drawer-handle-height);
-  flex: 0 0 var(--bt-drawer-handle-height);
+.bt-dock-zone.is-hovered {
+  background: rgba(42, 42, 42, 0.10);
+  border-color: rgba(42, 42, 42, 0.30);
+}
+
+.bt-dock-zone--top    { top: 0; left: 0; right: 0; height: 60px; }
+.bt-dock-zone--bottom { bottom: 0; left: 0; right: 0; height: 60px; }
+.bt-dock-zone--left   { top: 0; bottom: 0; left: 0; width: 60px; }
+.bt-dock-zone--right  { top: 0; bottom: 0; right: 0; width: 60px; }
+
+@media (max-width: 767px) {
+  .bt-dock-zone--left,
+  .bt-dock-zone--right {
+    display: none;
+  }
+}
+
+/* ===== Draggable Handle (floating character) ===== */
+.bt-floating-panel__handle {
+  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: bold;
-  color: var(--color-text);
-  background: var(--color-bg);
-  border: var(--border-width) solid var(--color-border);
-  border-bottom: 0;
-  cursor: pointer;
+  width: 56px;
+  height: 56px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  cursor: grab;
   pointer-events: auto;
+  user-select: none;
+  touch-action: none;
+  will-change: transform;
 }
 
-.bt-split-panel__handle:active {
+.bt-floating-panel__handle.is-dragging {
+  cursor: grabbing;
+}
+
+/* Pixel art sprite — bob + scale on the image, not the container */
+.bt-floating-panel__sprite {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 48px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  pointer-events: none;
+  user-select: none;
+  animation: idle-bob 2.4s ease-in-out infinite;
+  transition: transform 0.12s ease;
+}
+
+.bt-floating-panel__handle:hover .bt-floating-panel__sprite {
+  transform: scale(1.08);
+}
+
+.bt-floating-panel__handle.is-dragging .bt-floating-panel__sprite {
+  animation: none;
+  transform: scale(1.12);
+  transition: none;
+}
+
+@keyframes idle-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Tooltip bubble */
+.bt-floating-panel__handle::after {
+  content: '\6254\5230\8FB9\7F18 \2192';
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: normal;
+  font-family: 'Courier New', Consolas, monospace;
+  color: var(--color-bg);
+  background: var(--color-border);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.bt-floating-panel__handle:hover::after {
+  opacity: 1;
+}
+
+.bt-floating-panel__handle.is-dragging::after {
+  opacity: 0;
+}
+
+/* ===== Panel (shared) ===== */
+.bt-floating-panel__panel {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+/* ===== Panel — Bottom ===== */
+.bt-floating-panel__panel--bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: min(52vh, 500px);
+  animation: panel-slide-up 0.25s ease-out;
+}
+
+/* ===== Panel — Top ===== */
+.bt-floating-panel__panel--top {
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: min(52vh, 500px);
+  animation: panel-slide-down 0.25s ease-out;
+}
+
+/* ===== Panel — Left (row direction) ===== */
+.bt-floating-panel__panel--left {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  flex-direction: row;
+  width: min(420px, 40vw);
+  height: 100vh;
+  height: 100dvh;
+  animation: panel-slide-right 0.25s ease-out;
+}
+
+/* ===== Panel — Right (row direction) ===== */
+.bt-floating-panel__panel--right {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  flex-direction: row;
+  width: min(420px, 40vw);
+  height: 100vh;
+  height: 100dvh;
+  animation: panel-slide-left 0.25s ease-out;
+}
+
+/* ===== Panel Edge (integrated border bar — resize + collapse) ===== */
+.bt-panel-edge {
+  flex: 0 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 10px;
+  background: var(--color-bg);
+  user-select: none;
+  touch-action: none;
+  transition: background 0.12s ease, box-shadow 0.12s ease;
+}
+
+.bt-panel-edge:hover {
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 1px rgba(42, 42, 42, 0.08);
+}
+
+/* Grip texture */
+.bt-panel-edge__grip {
+  font-size: 10px;
+  letter-spacing: 4px;
+  line-height: 1;
+  color: var(--color-border);
+  opacity: 0.26;
+  pointer-events: none;
+}
+
+.bt-panel-edge:hover .bt-panel-edge__grip {
+  opacity: 0.58;
+}
+
+/* Collapse button embedded in edge */
+.bt-panel-edge__close {
+  font-family: 'Courier New', Consolas, monospace;
+  min-width: 44px;
+  min-height: 18px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--color-border);
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  padding: 1px 6px;
+  line-height: 1.15;
+  box-shadow: 1px 1px 0 var(--color-border);
+  cursor: pointer;
+  opacity: 0.78;
+  transition: background 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease, transform 0.12s ease;
+}
+
+.bt-panel-edge:hover .bt-panel-edge__close {
+  opacity: 0.92;
+}
+
+.bt-panel-edge__close:hover {
+  opacity: 1;
   background: #fff;
 }
 
-.bt-split-panel__handle strong {
-  font-size: 12px;
+.bt-panel-edge__close:active {
+  box-shadow: none;
+  transform: translate(2px, 2px);
 }
 
+/* Edge direction — bottom panel: edge at top, resize vertically */
+.bt-panel-edge--bottom {
+  cursor: ns-resize;
+  border-bottom: 2px solid var(--color-border);
+}
+
+/* Edge direction — top panel: edge at bottom */
+.bt-panel-edge--top {
+  cursor: ns-resize;
+  order: 1;
+  border-top: 2px solid var(--color-border);
+}
+
+/* Edge direction — left panel: edge at right, resize horizontally */
+.bt-panel-edge--left {
+  cursor: ew-resize;
+  flex-direction: column;
+  order: 1;
+  padding: 10px 0;
+  border-left: 2px solid var(--color-border);
+}
+
+/* Edge direction — right panel: edge at left */
+.bt-panel-edge--right {
+  cursor: ew-resize;
+  flex-direction: column;
+  padding: 10px 0;
+  order: -1;
+  border-right: 2px solid var(--color-border);
+}
+
+/* Vertical grip/close for left/right */
+.bt-panel-edge--left .bt-panel-edge__grip,
+.bt-panel-edge--right .bt-panel-edge__grip {
+  writing-mode: vertical-rl;
+  letter-spacing: 2px;
+}
+
+.bt-panel-edge--left .bt-panel-edge__close,
+.bt-panel-edge--right .bt-panel-edge__close {
+  min-width: 18px;
+  min-height: 44px;
+  padding: 5px 1px;
+  writing-mode: vertical-rl;
+}
+
+/* ===== Shell Panel (content area) ===== */
 .bt-shell-panel {
   position: relative;
   flex: 1;
   min-height: 0;
-  width: 100%;
-  margin: 0;
+  min-width: 0;
   background: #fff;
-  border: var(--border-width) solid var(--color-border);
-  pointer-events: auto;
   overflow: hidden;
 }
 
@@ -66,9 +295,25 @@
   animation: bt-shell-refresh 220ms ease-out forwards;
 }
 
-@keyframes slide-in {
+/* ===== Animations ===== */
+@keyframes panel-slide-up {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
+}
+
+@keyframes panel-slide-down {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes panel-slide-right {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes panel-slide-left {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
 
 @keyframes bt-shell-refresh {
@@ -77,9 +322,55 @@
   100% { opacity: 0; }
 }
 
+/* ===== Mobile ===== */
+@media (max-width: 767px) {
+  .bt-floating-panel__panel--bottom,
+  .bt-floating-panel__panel--top {
+    height: 50vh;
+  }
+
+  .bt-floating-panel__panel--left,
+  .bt-floating-panel__panel--right {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 50vh;
+    flex-direction: column;
+    animation-name: panel-slide-up;
+  }
+
+  .bt-panel-edge--left,
+  .bt-panel-edge--right {
+    flex: 0 0 20px;
+    flex-direction: row;
+    padding: 0 10px;
+    cursor: ns-resize;
+    order: 0;
+    border-right: 0;
+    border-left: 0;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .bt-panel-edge--left .bt-panel-edge__grip,
+  .bt-panel-edge--right .bt-panel-edge__grip {
+    writing-mode: horizontal-tb;
+    letter-spacing: 4px;
+  }
+
+  .bt-panel-edge--left .bt-panel-edge__close,
+  .bt-panel-edge--right .bt-panel-edge__close {
+    min-width: 44px;
+    min-height: 18px;
+    padding: 1px 6px;
+    writing-mode: horizontal-tb;
+  }
+}
+
 @media (max-width: 1023px) {
-  .bt-split-panel {
-    height: 50%;
-    padding: 0;
+  .bt-floating-panel__panel--bottom,
+  .bt-floating-panel__panel--top {
+    height: 50vh;
   }
 }

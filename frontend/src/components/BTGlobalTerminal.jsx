@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { postMarvinMessage } from '../api/client'
+import { postQiuMessage } from '../api/client'
 
 const initialMessages = [
-  { source: 'MARVIN', text: 'Marvin online. Standing by with cheerful mechanical patience.' },
+  { source: 'QIU', text: 'Qiu online. Standing by with cheerful mechanical patience.' },
   { source: 'SYS', text: 'Claude SDK agent channel pending.' },
-  { source: 'LOG', text: 'MRVN frame reference accepted. Handshake calibration stable.' }
+  { source: 'LOG', text: 'QIU frame reference accepted. Handshake calibration stable.' }
 ]
 
 function BTGlobalTerminal() {
@@ -32,11 +32,11 @@ function BTGlobalTerminal() {
         role: message.source === 'YOU' ? 'user' : 'assistant',
         content: message.text
       }))
-      const result = await postMarvinMessage(text, history)
+      const result = await postQiuMessage(text, history)
 
       setMessages((current) => [
         ...current,
-        { source: 'MARVIN', text: result.reply }
+        { source: 'QIU', text: result.reply }
       ])
     } catch (error) {
       setMessages((current) => [
@@ -45,7 +45,7 @@ function BTGlobalTerminal() {
           source: 'SYS',
           text: error instanceof Error
             ? error.message
-            : 'Marvin backend link failed. Check the backend logs and MiniMax key.'
+            : 'Qiu backend link failed. Check the backend logs and MiniMax key.'
         }
       ])
     } finally {
@@ -57,14 +57,14 @@ function BTGlobalTerminal() {
     <div className="bt-chat-interface">
       <div className="bt-chat-interface__header">
         <div className="bt-chat-interface__title">
-          <strong>marvin boot</strong>
+          <strong>qiu boot</strong>
           <em>/agent/local</em>
         </div>
       </div>
 
       <div className="bt-chat-interface__body">
         <div className="bt-chat-interface__notice">
-          <span>GUEST: MRVN</span>
+          <span>GUEST: QIU</span>
           <span>MODE: SAFE BOOT</span>
           <span>DISPLAY: TTY0</span>
         </div>

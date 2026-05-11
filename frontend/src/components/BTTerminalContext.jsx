@@ -3,34 +3,24 @@ import { createContext, useCallback, useContext, useMemo, useState } from 'react
 const BTTerminalContext = createContext(null)
 
 export function BTTerminalProvider({ children }) {
-  const [isBTTerminalEnabled, setIsBTTerminalEnabled] = useState(false)
   const [isBTTerminalOpen, setIsBTTerminalOpen] = useState(false)
-  const [isSplitMode, setIsSplitMode] = useState(false)
-
-  const enableBTTerminal = useCallback(() => {
-    setIsBTTerminalEnabled(true)
-    setIsBTTerminalOpen(true)
-    setIsSplitMode(true)
-  }, [])
+  const [dockEdge, setDockEdge] = useState('bottom')
 
   const openBTTerminal = useCallback(() => {
-    setIsSplitMode(true)
     setIsBTTerminalOpen(true)
   }, [])
 
   const closeBTTerminal = useCallback(() => {
-    setIsSplitMode(false)
     setIsBTTerminalOpen(false)
   }, [])
 
   const value = useMemo(() => ({
     closeBTTerminal,
-    enableBTTerminal,
+    dockEdge,
     isBTTerminalOpen,
-    isBTTerminalEnabled,
-    isSplitMode,
-    openBTTerminal
-  }), [closeBTTerminal, enableBTTerminal, isBTTerminalEnabled, isBTTerminalOpen, isSplitMode, openBTTerminal])
+    openBTTerminal,
+    setDockEdge
+  }), [closeBTTerminal, dockEdge, isBTTerminalOpen, openBTTerminal])
 
   return (
     <BTTerminalContext.Provider value={value}>

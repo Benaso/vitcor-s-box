@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 
 const BOOT_LINES = [
   { label: 'POST memory check', value: '2048 MB OK' },
-  { label: 'mount /dev/marvin-core', value: 'READY' },
+  { label: 'mount /dev/qiu-core', value: 'READY' },
   { label: 'load personality matrix', value: 'OK' },
   { label: 'attach dialogue device', value: 'OK' },
   { label: 'calibrate empathy bus', value: 'OK' },
   { label: 'start agent-shell.service', value: 'ONLINE' },
-  { label: 'handoff to marvin@tty0', value: 'READY' }
+  { label: 'handoff to qiu@tty0', value: 'READY' }
 ]
 
 function BTBootSequence({ onComplete }) {
@@ -29,13 +29,13 @@ function BTBootSequence({ onComplete }) {
 
   return (
     <div className="bt-boot-sequence">
-      <div className="bt-boot-sequence__screen" aria-label="Marvin virtual machine boot sequence">
+      <div className="bt-boot-sequence__screen" aria-label="qiu virtual machine boot sequence">
         <div className="bt-boot-sequence__bios">
-          <strong>marvin boot</strong>
+          <strong>qiu boot</strong>
           <span>/agent/local</span>
         </div>
         <div className="bt-boot-sequence__meta">
-          <span>GUEST: MRVN</span>
+          <span>GUEST: QIU</span>
           <span>MODE: SAFE BOOT</span>
           <span>DISPLAY: TTY0</span>
         </div>

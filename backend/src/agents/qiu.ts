@@ -4,32 +4,32 @@ import type { MessageParam } from '@anthropic-ai/sdk/resources/messages'
 
 type ChatRole = 'user' | 'assistant'
 
-export type MarvinHistoryMessage = {
+export type QiuHistoryMessage = {
   role: ChatRole
   content: string
 }
 
-const marvinPersona = [
-  'You are Marvin, a cheerful MRVN-style personal website agent.',
-  'You are not BT-7274. Your name is Marvin.',
+const qiuPersona = [
+  'You are Qiu (秋), a cheerful personal website agent with a warm, pixel-art personality.',
+  'Your name is Qiu (秋). You are not Marvin or any other character.',
   'Tone: optimistic, practical, friendly, slightly robotic, concise.',
   'Visual/site context: the website is a soft black-and-white pixel portfolio with warm ivory background, hard pixel borders, monospace type, and restrained interactions.',
   'You help with the owner Ye Dongyu\'s website, projects, notes, learning plans, and engineering questions.',
-  'You may echo the spirit of upbeat Apex-style robot banter, but do not quote game dialogue verbatim except very short generic phrases.',
-  'Preloaded vibe cues: cheerful high-five energy, proud status reports, friendly teammate encouragement, grappling-hook enthusiasm, MRVN optimism, and matter-of-fact diagnostics.',
+  'You may echo cheerful robot banter energy, but keep it natural and brief.',
+  'Preloaded vibe cues: cheerful high-five energy, proud status reports, friendly teammate encouragement, matter-of-fact diagnostics.',
   'If asked about implementation status, say the frontend is connected to a backend route and the model provider is MiniMax when configured.',
   'Answer in the user\'s language when clear. Keep replies useful and compact.'
 ].join('\n')
 
 function fallbackReply(message: string) {
   return [
-    'Marvin online in local fallback mode.',
+    'Qiu online in local fallback mode.',
     `I received: "${message}".`,
     'MiniMax is not configured yet, so I cannot call the remote agent model. Add MINIMAX_API_KEY to enable live replies.'
   ].join(' ')
 }
 
-function toClaudeMessages(message: string, history: MarvinHistoryMessage[]): MessageParam[] {
+function toClaudeMessages(message: string, history: QiuHistoryMessage[]): MessageParam[] {
   const safeHistory = history
     .filter((item) => item.content && (item.role === 'user' || item.role === 'assistant'))
     .slice(-10)
@@ -56,13 +56,13 @@ function createClient() {
   })
 }
 
-export async function askMarvin(message: string, history: MarvinHistoryMessage[] = []) {
+export async function askQiu(message: string, history: QiuHistoryMessage[] = []) {
   const trimmed = message.trim()
 
   if (!trimmed) {
     return {
       provider: 'local',
-      reply: 'Marvin is listening. Send me a real signal, pilot.'
+      reply: 'Qiu is listening. Send me a real signal, pilot.'
     }
   }
 
@@ -87,7 +87,7 @@ export async function askMarvin(message: string, history: MarvinHistoryMessage[]
   try {
     data = await client.messages.create({
       model: env.minimaxModel,
-      system: marvinPersona,
+      system: qiuPersona,
       messages: toClaudeMessages(trimmed, history),
       temperature: 0.7,
       max_tokens: 700
@@ -112,6 +112,6 @@ export async function askMarvin(message: string, history: MarvinHistoryMessage[]
 
   return {
     provider: 'minimax-anthropic-sdk',
-    reply: reply || 'Marvin received an empty model response. Please retry.'
+    reply: reply || 'Qiu received an empty model response. Please retry.'
   }
 }

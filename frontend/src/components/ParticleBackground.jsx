@@ -256,7 +256,8 @@ function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
 
       const titleTop = hideAtRef?.current?.getBoundingClientRect().top
       const avatarBottom = avatarCenter ? avatarCenter.y + avatarSize / 2 : 0
-      const hasScrolled = window.scrollY > 8
+      const siteMainEl = document.querySelector('.site-main')
+      const hasScrolled = window.scrollY > 8 || (siteMainEl ? siteMainEl.scrollTop > 8 : false)
       const shouldDisperseAvatar = (
         hasScrolled
         &&
