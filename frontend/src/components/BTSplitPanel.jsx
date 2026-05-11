@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAvatarReveal } from './AvatarRevealContext'
 import { useBTTerminal } from './BTTerminalContext'
+import { useLanguage } from '../i18n/LanguageContext'
 import BTBootSequence from './BTBootSequence'
 import BTGlobalTerminal from './BTGlobalTerminal'
 import './BTSplitPanel.css'
@@ -239,6 +240,7 @@ function DockZones({ hoveredZone }) {
 
 function BTSplitPanel() {
   const { hasEverRevealed, isAvatarRevealed } = useAvatarReveal()
+  const { t } = useLanguage()
   const location = useLocation()
   const {
     closeBTTerminal,
@@ -398,10 +400,10 @@ function BTSplitPanel() {
               className="bt-panel-edge__close"
               type="button"
               onClick={handleClose}
-              aria-label="收起对话框"
-              title="收起对话框"
+              aria-label={t.chat?.collapseAria ?? 'Collapse dialogue panel'}
+              title={t.chat?.collapseAria ?? 'Collapse dialogue panel'}
             >
-              收起
+              {t.chat?.collapse ?? 'Collapse'}
             </button>
           </div>
           <div className="bt-shell-panel">

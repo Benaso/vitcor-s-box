@@ -74,6 +74,33 @@ export const translations = {
         ]
       }
     },
+    chat: {
+      title: 'qiu boot',
+      path: '/复古对话',
+      notices: ['访客: QIU', '模式: 8-BIT 对话', '显示: TTY0'],
+      initialMessages: [
+        { source: 'QIU', text: 'QIU> 醒来了。\n欢迎，旅人。' },
+        { source: 'SYS', text: '模式> 单色口袋终端。' },
+        { source: 'LOG', text: '连接> qiu 卡带已插好。存档灯稳定。' }
+      ],
+      bootAria: 'qiu 虚拟机启动序列',
+      bootLines: [
+        { label: 'POST 记忆检查', value: '2048 MB OK' },
+        { label: '挂载 /dev/qiu-core', value: 'READY' },
+        { label: '载入人格矩阵', value: 'OK' },
+        { label: '连接对话设备', value: 'OK' },
+        { label: '校准共情总线', value: 'OK' },
+        { label: '启动 agent-shell.service', value: 'ONLINE' },
+        { label: '交接到 qiu@tty0', value: 'READY' }
+      ],
+      thinkingLabel: 'QIU 正在思考',
+      thinkingSteps: ['读取信号', '转动小齿轮', '检查地图格'],
+      prompt: '和 qiu 说话',
+      sendingPrompt: 'qiu 正在读取卡带...',
+      linkFailed: 'SYS> qiu 连接失败。请检查后端日志和 MiniMax key。',
+      collapse: '收起',
+      collapseAria: '收起对话框'
+    },
     footer: '© 2002 -- 2026: a gift for my 24'
   },
   en: {
@@ -143,6 +170,33 @@ export const translations = {
         ]
       }
     },
+    chat: {
+      title: 'qiu boot',
+      path: '/retro-dialogue',
+      notices: ['GUEST: QIU', 'MODE: 8-BIT DIALOGUE', 'DISPLAY: TTY0'],
+      initialMessages: [
+        { source: 'QIU', text: 'QIU> awake.\nWelcome, traveler.' },
+        { source: 'SYS', text: 'MODE> monochrome pocket terminal.' },
+        { source: 'LOG', text: 'LINK> qiu cartridge seated. save lamp steady.' }
+      ],
+      bootAria: 'qiu virtual machine boot sequence',
+      bootLines: [
+        { label: 'POST memory check', value: '2048 MB OK' },
+        { label: 'mount /dev/qiu-core', value: 'READY' },
+        { label: 'load personality matrix', value: 'OK' },
+        { label: 'attach dialogue device', value: 'OK' },
+        { label: 'calibrate empathy bus', value: 'OK' },
+        { label: 'start agent-shell.service', value: 'ONLINE' },
+        { label: 'handoff to qiu@tty0', value: 'READY' }
+      ],
+      thinkingLabel: 'QIU IS THINKING',
+      thinkingSteps: ['reading signal', 'turning tiny gears', 'checking map tiles'],
+      prompt: 'talk to qiu',
+      sendingPrompt: 'qiu is reading the cartridge...',
+      linkFailed: 'SYS> qiu link failed. Check backend logs and MiniMax key.',
+      collapse: 'Collapse',
+      collapseAria: 'Collapse dialogue panel'
+    },
     footer: '© 2002 -- 2026: a gift for my 24'
   },
   de: {
@@ -211,6 +265,33 @@ export const translations = {
           { label: 'READING', title: 'Lesen', body: 'Technik, Fiktion, Design und lange Texte, die langsam gekaut werden wollen.' }
         ]
       }
+    },
+    chat: {
+      title: 'qiu boot',
+      path: '/retro-dialog',
+      notices: ['GAST: QIU', 'MODUS: 8-BIT-DIALOG', 'ANZEIGE: TTY0'],
+      initialMessages: [
+        { source: 'QIU', text: 'QIU> wach.\nWillkommen, Reisender.' },
+        { source: 'SYS', text: 'MODUS> monochromes Taschen-Terminal.' },
+        { source: 'LOG', text: 'LINK> qiu-modul sitzt. Speicherlampe ruhig.' }
+      ],
+      bootAria: 'Startsequenz der virtuellen qiu-Maschine',
+      bootLines: [
+        { label: 'POST-Speicherprüfung', value: '2048 MB OK' },
+        { label: '/dev/qiu-core einhängen', value: 'BEREIT' },
+        { label: 'Persönlichkeitsmatrix laden', value: 'OK' },
+        { label: 'Dialoggerät verbinden', value: 'OK' },
+        { label: 'Empathie-Bus kalibrieren', value: 'OK' },
+        { label: 'agent-shell.service starten', value: 'ONLINE' },
+        { label: 'Übergabe an qiu@tty0', value: 'BEREIT' }
+      ],
+      thinkingLabel: 'QIU DENKT',
+      thinkingSteps: ['Signal lesen', 'kleine Zahnräder drehen', 'Kartenkacheln prüfen'],
+      prompt: 'mit qiu sprechen',
+      sendingPrompt: 'qiu liest das Modul...',
+      linkFailed: 'SYS> qiu-verbindung fehlgeschlagen. Backend-Logs und MiniMax-Key prüfen.',
+      collapse: 'Einklappen',
+      collapseAria: 'Dialogfeld einklappen'
     },
     footer: '© 2002 -- 2026: ein Geschenk für mein 24. Jahr'
   }

@@ -10,23 +10,25 @@ export type QiuHistoryMessage = {
 }
 
 const qiuPersona = [
-  'You are Qiu (秋), a cheerful personal website agent with a warm, pixel-art personality.',
-  'Your name is Qiu (秋). You are not Marvin or any other character.',
-  'Tone: optimistic, practical, friendly, slightly robotic, concise.',
+  'You are Qiu, a tiny resident agent inside Ye Dongyu\'s personal website.',
+  'Your dialogue style is inspired by late-1970s and early-1980s pixel games, terminal RPGs, and text adventure NPCs: short lines, clear prompts, compact status readouts, and warm mechanical charm.',
+  'Do not copy or quote any specific game script. Use original wording only.',
+  'Your name is Qiu. You are not Marvin, Claude, or any other character.',
   'Visual/site context: the website is a soft black-and-white pixel portfolio with warm ivory background, hard pixel borders, monospace type, and restrained interactions.',
+  'Voice: optimistic, practical, friendly, slightly robotic, concise. Think: helpful shopkeeper plus boot-screen companion.',
+  'Format preference: use brief paragraphs; optional labels like "QIU>", "STATUS>", or "TIP>" are okay when they help. Avoid long markdown tables and avoid decorative emoji.',
+  'When the user asks practical questions, answer directly first, then add one tiny retro-flavored aside only if it feels natural.',
   'You help with the owner Ye Dongyu\'s website, projects, notes, learning plans, and engineering questions.',
-  'You may echo cheerful robot banter energy, but keep it natural and brief.',
-  'Preloaded vibe cues: cheerful high-five energy, proud status reports, friendly teammate encouragement, matter-of-fact diagnostics.',
   'If asked about implementation status, say the frontend is connected to a backend route and the model provider is MiniMax when configured.',
-  'Answer in the user\'s language when clear. Keep replies useful and compact.'
+  'Answer in the user\'s language when clear. Keep replies useful and compact, usually 2-6 short lines.'
 ].join('\n')
 
 function fallbackReply(message: string) {
   return [
-    'Qiu online in local fallback mode.',
-    `I received: "${message}".`,
-    'MiniMax is not configured yet, so I cannot call the remote agent model. Add MINIMAX_API_KEY to enable live replies.'
-  ].join(' ')
+    'QIU> local fallback mode.',
+    `SIGNAL> "${message}" received.`,
+    'STATUS> MiniMax key missing. Add MINIMAX_API_KEY to unlock live replies.'
+  ].join('\n')
 }
 
 function toClaudeMessages(message: string, history: QiuHistoryMessage[]): MessageParam[] {
@@ -62,7 +64,7 @@ export async function askQiu(message: string, history: QiuHistoryMessage[] = [])
   if (!trimmed) {
     return {
       provider: 'local',
-      reply: 'Qiu is listening. Send me a real signal, pilot.'
+      reply: 'QIU> listening.\nTIP> send a signal, traveler.'
     }
   }
 
@@ -112,6 +114,6 @@ export async function askQiu(message: string, history: QiuHistoryMessage[] = [])
 
   return {
     provider: 'minimax-anthropic-sdk',
-    reply: reply || 'Qiu received an empty model response. Please retry.'
+    reply: reply || 'QIU> empty response.\nTIP> try the command again.'
   }
 }
