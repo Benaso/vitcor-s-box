@@ -186,7 +186,7 @@ function ParticleBackground({ mousePos, hideAtRef, hasRevealed = false, onDisper
       draw() {
         if (this.opacity < 0.02) return
         ctx.font = `${this.size}px monospace`
-        ctx.fillStyle = `rgba(18, 18, 18, ${this.opacity})`
+        ctx.fillStyle = `rgba(120, 120, 120, ${this.opacity})`
         ctx.fillText(this.codeText, this.x, this.y)
       }
     }

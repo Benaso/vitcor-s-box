@@ -455,6 +455,24 @@ function BTSplitPanel() {
 
   const showHandle = !isBTTerminalOpen
 
+  // Determine tooltip direction based on handle position so it stays in viewport
+  let tooltipClass = ''
+  if (showHandle && !isDragging && !showRouteBubble) {
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    const HANDLE_HALF = 28
+    const TOOLTIP_MARGIN = 80 // approximate tooltip height + gap
+    const TOOLTIP_WIDTH = 110 // approximate tooltip half-width
+
+    if (pos.y - HANDLE_HALF < TOOLTIP_MARGIN) {
+      tooltipClass = ' tooltip-below'
+    } else if (pos.x < TOOLTIP_WIDTH) {
+      tooltipClass = ' tooltip-right'
+    } else if (pos.x > vw - TOOLTIP_WIDTH) {
+      tooltipClass = ' tooltip-left'
+    }
+  }
+
   return (
     <div className="bt-floating-panel">
       {showHandle && isDragging && (
@@ -464,7 +482,7 @@ function BTSplitPanel() {
       {showHandle && (
         <div
           ref={handleRef}
-          className={`bt-floating-panel__handle${isDragging ? ' is-dragging' : ''}${showRouteBubble ? ' has-route-bubble' : ''}`}
+          className={`bt-floating-panel__handle${isDragging ? ' is-dragging' : ''}${showRouteBubble ? ' has-route-bubble' : ''}${tooltipClass}`}
           style={{
             transform: `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`
           }}

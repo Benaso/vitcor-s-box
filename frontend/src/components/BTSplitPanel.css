@@ -119,6 +119,27 @@
   opacity: 0;
 }
 
+/* Tooltip direction variants — keeps tooltip visible near edges */
+.bt-floating-panel__handle.tooltip-below::after {
+  bottom: auto;
+  top: calc(100% + 8px);
+}
+
+.bt-floating-panel__handle.tooltip-left::after {
+  bottom: auto;
+  left: auto;
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.bt-floating-panel__handle.tooltip-right::after {
+  bottom: auto;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .bt-floating-panel__speech {
   position: absolute;
   right: calc(100% + 12px);

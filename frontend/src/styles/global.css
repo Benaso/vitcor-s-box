@@ -1,3 +1,7 @@
+html {
+  overflow-y: scroll;
+}
+
 :root {
   --color-bg: #f5f2eb;
   --color-border: #2a2a2a;
@@ -33,6 +37,7 @@ a {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 
@@ -1177,6 +1182,425 @@ a {
   margin-bottom: 10px;
   font-size: 16px;
   color: var(--color-text);
+}
+
+/* ================================================
+   PROJECTS PAGE — FILM PROJECTOR DESIGN
+   ================================================ */
+
+/* Header slide-in */
+.film-hdr {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.film-hdr.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.film-hdr__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 8px 14px;
+  border: 2px solid var(--color-border);
+  box-shadow: 3px 3px 0 var(--color-border);
+  background: var(--color-bg);
+}
+.film-hdr__count-label {
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
+}
+.film-hdr__count-val {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+/* ===== Film Reels Row ===== */
+.film-reels {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition-delay: 200ms;
+}
+.film-reels.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Film Canister ===== */
+.film-can {
+  width: 130px;
+  background: var(--color-border);
+  border: var(--border-width) solid #1a1a1a;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 #1a1a1a;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.film-can:hover {
+  transform: translateY(-4px);
+}
+.film-can.active {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    var(--shadow-offset) var(--shadow-offset) 0 #1a1a1a;
+}
+
+/* Reel circle */
+.film-can__reel {
+  width: 100%;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at center,
+      #1a1a1a 10%,
+      #383838 11%,
+      #383838 20%,
+      #2e2e2e 21%,
+      #2e2e2e 32%,
+      #383838 33%,
+      #383838 44%,
+      #2e2e2e 45%,
+      #2e2e2e 100%
+    );
+  border-bottom: 2px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.film-can__spool {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #444;
+  background: #1a1a1a;
+  position: relative;
+  z-index: 1;
+}
+.film-can__cross {
+  position: absolute;
+  background: #444;
+}
+.film-can__cross--h {
+  width: 100%;
+  height: 2px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+.film-can__cross--v {
+  width: 2px;
+  height: 100%;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Label under reel */
+.film-can__info {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-align: center;
+}
+.film-can__label {
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 9px;
+  color: #888;
+  letter-spacing: 1px;
+}
+.film-can__name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  line-height: 1.4;
+  color: var(--color-bg);
+}
+
+/* Arrow indicator */
+.film-can__arrow {
+  padding: 4px 0 6px;
+  font-size: 9px;
+  color: #666;
+  transition: color 0.2s ease;
+}
+.film-can.active .film-can__arrow {
+  color: var(--color-bg);
+}
+
+/* ===== Film Strip — full-viewport unroll ===== */
+.film-strip-wrap {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.film-strip-wrap.open {
+  max-height: 460px;
+}
+
+.film-strip {
+  margin: 20px 0;
+  background: #1a1a1a;
+  border: var(--border-width) solid var(--color-border);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-border);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) #1a1a1a;
+  /* Unroll: starts fully clipped from left, reveals right-to-left */
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.film-strip.unrolled {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Sprocket holes edge */
+.film-strip__edge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 10px;
+  background: #222;
+}
+.film-strip__hole {
+  width: 6px;
+  height: 5px;
+  flex-shrink: 0;
+  background: var(--color-bg);
+  opacity: 0.7;
+}
+
+/* Frames container */
+.film-strip__frames {
+  display: flex;
+  padding: 16px 20px;
+  min-width: max-content;
+  gap: 0;
+}
+
+/* ===== Film Frames ===== */
+.film-frame {
+  flex-shrink: 0;
+  width: 260px;
+  min-height: 300px;
+  padding: 24px 20px;
+  border: 2px solid #333;
+  background: #1e1e1e;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  margin: 0 6px;
+}
+/* Projector gate marks */
+.film-frame::before,
+.film-frame::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #111;
+}
+.film-frame::before { top: 0; }
+.film-frame::after  { bottom: 0; }
+
+.film-frame__num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #444;
+  letter-spacing: 1px;
+}
+.film-frame__cat {
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 11px;
+  color: #666;
+}
+.film-frame__sec {
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 1px;
+}
+.film-frame__heading {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #ccc;
+  margin: 8px 0 0;
+}
+.film-frame__text {
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #999;
+  margin: 0;
+}
+
+/* Leader frame */
+.film-frame--leader {
+  width: 120px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-left: 4px solid #444;
+}
+.film-frame__leader-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.film-frame__leader-bars span {
+  display: block;
+  width: 30px;
+  height: 3px;
+  background: #444;
+}
+.film-frame__leader-bars span:nth-child(even) {
+  width: 20px;
+  align-self: flex-end;
+}
+.film-frame__leader-txt {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: #555;
+  letter-spacing: 2px;
+}
+
+/* Title frame */
+.film-frame--title {
+  border-left: 4px solid var(--color-bg);
+}
+
+/* Description frame */
+.film-frame--desc {
+  width: 320px;
+}
+
+/* End frame */
+.film-frame--end {
+  width: 140px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.film-frame__end-lines {
+  display: flex;
+  gap: 4px;
+}
+.film-frame__end-lines span {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: #555;
+}
+.film-frame__end-txt {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #555;
+  letter-spacing: 3px;
+}
+
+/* Tags frame */
+.film-frame--tags {
+  width: 280px;
+}
+.film-frame__tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.film-frame__tag {
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 11px;
+  color: #bbb;
+  padding: 4px 8px;
+  border: 2px solid #444;
+  background: #262626;
+}
+
+/* Note frame */
+.film-frame--note {
+  width: 340px;
+}
+
+/* Status frame */
+.film-frame--status {
+  width: 180px;
+  justify-content: center;
+}
+.film-frame__status-val {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #999;
+  letter-spacing: 1px;
+  margin-top: 16px;
+}
+.film-frame__status-dot {
+  width: 8px;
+  height: 8px;
+  background: #888;
+  animation: status-pulse 1.5s steps(1, end) infinite;
+}
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.film-frame__year {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  color: #333;
+  margin-top: 20px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 767px) {
+  .film-reels {
+    gap: 10px;
+  }
+  .film-can {
+    width: 100px;
+  }
+  .film-can__name {
+    font-size: 6px;
+  }
+  .film-can__label {
+    font-size: 8px;
+  }
+  .film-frame {
+    width: 200px;
+    min-height: 260px;
+  }
+  .film-frame--desc {
+    width: 240px;
+  }
+  .film-strip-wrap.open {
+    max-height: 400px;
+  }
 }
 
 ::-webkit-scrollbar {
