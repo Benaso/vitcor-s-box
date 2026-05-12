@@ -13,15 +13,20 @@ const codePool = [
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 ]
 
-function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
+function ParticleBackground({ mousePos, hideAtRef, hasRevealed = false, onDisperseChange }) {
   const canvasRef = useRef(null)
   const imageRef = useRef(null)
   const mousePosRef = useRef(mousePos)
+  const hasRevealedRef = useRef(hasRevealed)
   const disperseRef = useRef(false)
 
   useEffect(() => {
     mousePosRef.current = mousePos
   }, [mousePos])
+
+  useEffect(() => {
+    hasRevealedRef.current = hasRevealed
+  }, [hasRevealed])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -154,8 +159,8 @@ function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
         this.x = x
         this.y = y
         this.codeText = text
-        this.opacity = 0
-        this.maxOpacity = 0.5
+        this.opacity = hasRevealedRef.current ? 0.68 : 0
+        this.maxOpacity = 0.68
         this.floatSpeed = 0.3 + Math.random() * 0.5
         this.amplitude = 20 + Math.random() * 40
         this.phase = Math.random() * Math.PI * 2
@@ -181,7 +186,7 @@ function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
       draw() {
         if (this.opacity < 0.02) return
         ctx.font = `${this.size}px monospace`
-        ctx.fillStyle = `rgba(42, 42, 42, ${this.opacity})`
+        ctx.fillStyle = `rgba(18, 18, 18, ${this.opacity})`
         ctx.fillText(this.codeText, this.x, this.y)
       }
     }
@@ -296,6 +301,9 @@ function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
 
       if (disperseRef.current !== shouldDisperseAvatar) {
         disperseRef.current = shouldDisperseAvatar
+        if (shouldDisperseAvatar) {
+          hasRevealedRef.current = true
+        }
         onDisperseChange?.(shouldDisperseAvatar)
       }
 
@@ -309,7 +317,7 @@ function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
       })
 
       // 更新和绘制 code 粒子
-      const shouldCodeAppear = hasScrolled && typeof titleTop === 'number' && avatarBottom + avatarLayout.disperseTriggerOffset >= titleTop
+      const shouldCodeAppear = hasRevealedRef.current || (hasScrolled && typeof titleTop === 'number' && avatarBottom + avatarLayout.disperseTriggerOffset >= titleTop)
       codeParticles.forEach(cp => {
         cp.update(shouldCodeAppear)
         cp.draw()

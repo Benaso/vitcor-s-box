@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAvatarReveal } from '../components/AvatarRevealContext'
 import ParticleBackground from '../components/ParticleBackground'
 import TerminalCard from '../components/TerminalCard'
@@ -7,12 +7,8 @@ import { useLanguage } from '../i18n/LanguageContext'
 function Home() {
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000, type: 'mouse' })
   const titleRef = useRef(null)
-  const { isAvatarRevealed, resetAvatarReveal, revealAvatar } = useAvatarReveal()
+  const { hasEverRevealed, revealAvatar } = useAvatarReveal()
   const { t } = useLanguage()
-
-  useLayoutEffect(() => {
-    resetAvatarReveal()
-  }, [resetAvatarReveal])
 
   const handlePointerMove = (event) => {
     setMousePos({
@@ -38,6 +34,7 @@ function Home() {
       <ParticleBackground
         mousePos={mousePos}
         hideAtRef={titleRef}
+        hasRevealed={hasEverRevealed}
         onDisperseChange={(shouldDisperse) => {
           if (shouldDisperse) {
             revealAvatar()
