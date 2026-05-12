@@ -33,11 +33,11 @@ async function loadProject(projectId: number) {
   const project = rows[0]
 
   const imgRes = await pool.query(
-    'SELECT id, url, alt FROM project_images WHERE project_id = $1 ORDER BY id',
+    'SELECT id, url, sort_order FROM project_images WHERE project_id = $1 ORDER BY sort_order',
     [projectId]
   )
   const vidRes = await pool.query(
-    'SELECT id, url, caption FROM project_videos WHERE project_id = $1 ORDER BY id',
+    'SELECT id, url, sort_order FROM project_videos WHERE project_id = $1 ORDER BY sort_order',
     [projectId]
   )
 
@@ -67,11 +67,11 @@ router.get('/', async (_req: any, res: any) => {
     const withMedia = await Promise.all(
       projects.map(async (p: any) => {
         const imgRes = await db.query(
-          'SELECT id, url, alt FROM project_images WHERE project_id = $1 ORDER BY id',
+          'SELECT id, url, sort_order FROM project_images WHERE project_id = $1 ORDER BY sort_order',
           [p.id]
         )
         const vidRes = await db.query(
-          'SELECT id, url, caption FROM project_videos WHERE project_id = $1 ORDER BY id',
+          'SELECT id, url, sort_order FROM project_videos WHERE project_id = $1 ORDER BY sort_order',
           [p.id]
         )
         return { ...p, images: imgRes.rows, videos: vidRes.rows }
