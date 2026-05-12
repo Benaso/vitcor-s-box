@@ -1,7 +1,8 @@
 export const languages = [
-  { code: 'zh', label: '中' },
+  { code: 'zh', label: 'ZH' },
   { code: 'en', label: 'EN' },
-  { code: 'de', label: 'DE' }
+  { code: 'de', label: 'DE' },
+  { code: 'ja', label: 'JA' }
 ]
 
 const terminalLine = 'choose life, choose a job, choose a family...'
@@ -75,29 +76,37 @@ export const translations = {
       }
     },
     chat: {
-      title: 'qiu boot',
-      path: '/复古对话',
-      notices: ['访客: QIU', '模式: 8-BIT 对话', '显示: TTY0'],
+      title: 'qiu',
+      path: '你站在一段闪烁的对白前。',
+      routeGreetings: [
+        '秋> 新的一页亮起来了。\n我陪你走这一段。',
+        '秋> 屏幕轻轻闪了一下。\n看来剧情往前走了。',
+        '秋> 地图展开了一格。\n这一页也有新的线索。',
+        '秋> 我听见页面翻动的声音了。\n要在这里停一会儿吗？',
+        '秋> 像素风从边框外吹进来。\n我在，你继续看。'
+      ],
+      agentName: '秋',
+      notices: ['访客: 秋', '模式: 8-BIT 对话', '显示: TTY0'],
       initialMessages: [
-        { source: 'QIU', text: 'QIU> 醒来了。\n欢迎，旅人。' },
-        { source: 'SYS', text: '模式> 单色口袋终端。' },
-        { source: 'LOG', text: '连接> qiu 卡带已插好。存档灯稳定。' }
+        { source: 'QIU', text: '秋> 你来了。\n屏幕亮了一下，我也醒了。' },
+        { source: 'QIU', text: '这里收着作品、笔记，还有一些还没说完的想法。\n你想先看哪一页？' },
+        { source: 'LOG', text: '存档灯稳定。对白已经开始。' }
       ],
       bootAria: 'qiu 虚拟机启动序列',
       bootLines: [
         { label: 'POST 记忆检查', value: '2048 MB OK' },
-        { label: '挂载 /dev/qiu-core', value: 'READY' },
+        { label: '挂载 /dev/autumn-core', value: 'READY' },
         { label: '载入人格矩阵', value: 'OK' },
         { label: '连接对话设备', value: 'OK' },
         { label: '校准共情总线', value: 'OK' },
         { label: '启动 agent-shell.service', value: 'ONLINE' },
-        { label: '交接到 qiu@tty0', value: 'READY' }
+        { label: '交接到 秋@tty0', value: 'READY' }
       ],
-      thinkingLabel: 'QIU 正在思考',
+      thinkingLabel: '秋正在思考',
       thinkingSteps: ['读取信号', '转动小齿轮', '检查地图格'],
-      prompt: '和 qiu 说话',
-      sendingPrompt: 'qiu 正在读取卡带...',
-      linkFailed: 'SYS> qiu 连接失败。请检查后端日志和 MiniMax key。',
+      prompt: '和秋说话',
+      sendingPrompt: '秋正在读取卡带...',
+      linkFailed: 'SYS> 秋连接失败。请检查后端日志和 MiniMax key。',
       collapse: '收起',
       collapseAria: '收起对话框'
     },
@@ -171,8 +180,13 @@ export const translations = {
       }
     },
     chat: {
-      title: 'qiu boot',
+      title: 'qiu',
       path: '/retro-dialogue',
+      routeGreetings: [
+        'QIU> a new page glows.\nI will walk with you.',
+        'QIU> the screen flickers softly.\nThis scene is ready.',
+        'QIU> the map opens one tile.\nShall we continue?'
+      ],
       notices: ['GUEST: QIU', 'MODE: 8-BIT DIALOGUE', 'DISPLAY: TTY0'],
       initialMessages: [
         { source: 'QIU', text: 'QIU> awake.\nWelcome, traveler.' },
@@ -267,8 +281,13 @@ export const translations = {
       }
     },
     chat: {
-      title: 'qiu boot',
+      title: 'qiu',
       path: '/retro-dialog',
+      routeGreetings: [
+        'QIU> Eine neue Seite leuchtet.\nIch begleite dich.',
+        'QIU> Der Bildschirm flackert leise.\nDiese Szene ist bereit.',
+        'QIU> Die Karte öffnet ein Feld.\nGehen wir weiter?'
+      ],
       notices: ['GAST: QIU', 'MODUS: 8-BIT-DIALOG', 'ANZEIGE: TTY0'],
       initialMessages: [
         { source: 'QIU', text: 'QIU> wach.\nWillkommen, Reisender.' },
@@ -294,5 +313,107 @@ export const translations = {
       collapseAria: 'Dialogfeld einklappen'
     },
     footer: '© 2002 -- 2026: ein Geschenk für mein 24. Jahr'
+  },
+  ja: {
+    nav: {
+      home: 'ホーム',
+      about: 'プロフィール',
+      projects: 'プロジェクト',
+      blog: 'メモ',
+      hobbies: '趣味'
+    },
+    routes: {
+      home: 'ホーム',
+      about: 'プロフィール',
+      projects: 'プロジェクト',
+      blog: 'メモ',
+      hobbies: '趣味',
+      page: 'ページ'
+    },
+    transition: {
+      eyebrow: '// ルート'
+    },
+    home: {
+      title: 'YE DONGYU',
+      subtitle: '産業ソフトウェアエンジニア / AIエージェントエンジニア',
+      terminal: terminalLine,
+      viewProjects: 'ねえ！秋！'
+    },
+    pages: {
+      about: {
+        eyebrow: 'ABOUT',
+        title: 'プロフィール',
+        intro: '産業ソフトウェア、エンジニアリング効率、AIエージェントに関心があります。複雑なシステムを、明確で保守しやすく、実際に使えるツールに変えています。',
+        items: [
+          { label: 'ORIGIN', title: 'エンジニアリング感', body: '本当の問題から出発し、ワークフロー・データ・インターフェースを信頼できる作業台に整理するのが好きです。' },
+          { label: 'METHOD', title: 'ゆっくり考え、速く作る', body: 'まず境界を明確にしてから、小さな反復で着実に進めます。' },
+          { label: 'CURRENT', title: '現在', body: 'AIエージェントと産業ソフトウェアが交わるプロダクト形態を模索しています。' }
+        ]
+      },
+      projects: {
+        eyebrow: 'PROJECTS',
+        title: 'プロジェクト',
+        intro: 'ツール、実験、エンジニアリング作品の置き場所。それぞれに問題、トレードオフ、振り返りがあります。',
+        items: [
+          { label: 'SYSTEM', title: '産業ワークフロー', body: 'エンジニアリング現場向けのワークフロー整理、データ管理、インタラクションプロトタイプ。' },
+          { label: 'AGENT', title: 'AIエージェント実験', body: 'ツール利用、タスク分解、人間とエージェントの協働に関する実践。' },
+          { label: 'WEB', title: '個人サイト', body: '柔らかな白黒ピクセル風のポートフォリオとプロフィールサイト。' }
+        ]
+      },
+      blog: {
+        eyebrow: 'NOTES',
+        title: 'メモ',
+        intro: '短い記録：技術判断、学習ノート、失敗、ひらめき、まだ整理されていないけれど残しておきたいアイデア。',
+        items: [
+          { label: 'LOG', title: 'ビルドログ', body: '曖昧なアイデアが使えるものになるまでの過程を記録。' },
+          { label: 'THINKING', title: '技術判断', body: 'なぜその道を選んだのか。残ったコードだけではなく、その理由を残す。' },
+          { label: 'LIFE', title: '生活の断片', body: '仕事以外の少しの文脈を、未来の自分のために。' }
+        ]
+      },
+      hobbies: {
+        eyebrow: 'HOBBIES',
+        title: '趣味',
+        intro: '履歴書のポイントではなく、好奇心と手触りを保ち続けるものたち。',
+        items: [
+          { label: 'MUSIC', title: '音楽', body: 'ループできる音。チェックリストより一日を前に進めることがある。' },
+          { label: 'GAMES', title: 'ゲーム', body: '明確なルール、強いフィードバック、独自の世界観を持つ作品が好き。' },
+          { label: 'READING', title: '読書', body: '技術、小説、デザイン、ゆっくり噛みしめたい長い文章。' }
+        ]
+      }
+    },
+    chat: {
+      title: 'qiu',
+      path: '点滅する対話の前に立っている。',
+      routeGreetings: [
+        '秋> 新しいページが光ったよ。\n一緒に行こう。',
+        '秋> 画面が少し光った。\n次の場面へ行こう。',
+        '秋> 地図が一マス開いたよ。\n進んでみる？'
+      ],
+      agentName: '秋',
+      notices: ['ゲスト: 秋', 'モード: 8-BIT ダイアログ', 'ディスプレイ: TTY0'],
+      initialMessages: [
+        { source: 'QIU', text: '秋> 起動完了。\nようこそ、旅人さん。' },
+        { source: 'SYS', text: 'モード> モノクロポケットターミナル。' },
+        { source: 'LOG', text: '接続> 秋のカートリッジ装着。セーブランプ安定。' }
+      ],
+      bootAria: 'qiu 仮想マシン起動シーケンス',
+      bootLines: [
+        { label: 'POST メモリチェック', value: '2048 MB OK' },
+        { label: '/dev/autumn-core をマウント', value: 'READY' },
+        { label: '人格マトリックスを読み込み', value: 'OK' },
+        { label: 'ダイアログデバイスを接続', value: 'OK' },
+        { label: '共感バスをキャリブレーション', value: 'OK' },
+        { label: 'agent-shell.service を起動', value: 'ONLINE' },
+        { label: '秋@tty0 にハンドオフ', value: 'READY' }
+      ],
+      thinkingLabel: '秋が考えています',
+      thinkingSteps: ['信号を読み取り中', '小さな歯車を回転中', 'マップタイルを確認中'],
+      prompt: '秋に話しかける',
+      sendingPrompt: '秋がカートリッジを読み込み中...',
+      linkFailed: 'SYS> 秋との接続に失敗。バックエンドログとMiniMaxキーを確認してください。',
+      collapse: '折りたたむ',
+      collapseAria: 'ダイアログパネルを折りたたむ'
+    },
+    footer: '© 2002 -- 2026: 24歳の自分への贈り物'
   }
 }

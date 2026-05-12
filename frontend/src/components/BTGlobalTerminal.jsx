@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { postQiuMessage } from '../api/client'
 import { useLanguage } from '../i18n/LanguageContext'
+import './BTGlobalTerminal.css'
 
 const defaultChat = {
-  title: 'qiu boot',
+  title: 'qiu',
   path: '/retro-dialogue',
+  agentName: 'QIU',
   notices: ['GUEST: QIU', 'MODE: 8-BIT DIALOGUE', 'DISPLAY: TTY0'],
   initialMessages: [
   { source: 'QIU', text: 'QIU> awake.\nWelcome, traveler.' },
@@ -18,7 +20,7 @@ const defaultChat = {
   linkFailed: 'SYS> qiu link failed. Check backend logs and MiniMax key.'
 }
 
-function BTGlobalTerminal() {
+function BTGlobalTerminal({ portraitSrc }) {
   const { language, t } = useLanguage()
   const chat = useMemo(() => ({
     ...defaultChat,
@@ -28,6 +30,7 @@ function BTGlobalTerminal() {
   const [draft, setDraft] = useState('')
   const [isSending, setIsSending] = useState(false)
   const messagesRef = useRef(null)
+  const getSourceLabel = (source) => (source === 'QIU' ? chat.agentName : source)
 
   useEffect(() => {
     setMessages((current) => {
@@ -96,6 +99,14 @@ function BTGlobalTerminal() {
       </div>
 
       <div className="bt-chat-interface__body">
+        {portraitSrc && (
+          <div className="bt-chat-interface__portrait">
+            <div className="bt-chat-interface__portrait-frame">
+              <img src={portraitSrc} alt="" draggable={false} />
+            </div>
+          </div>
+        )}
+
         <div className="bt-chat-interface__notice">
           {chat.notices.map((notice) => (
             <span key={notice}>{notice}</span>
@@ -105,7 +116,7 @@ function BTGlobalTerminal() {
           {messages.map((message, index) => (
             <div key={`${message.source}-${index}`} className="bt-chat-interface__message">
               <span className={`bt-chat-interface__source bt-chat-interface__source--${message.source.toLowerCase()}`}>
-                {message.source}
+                {getSourceLabel(message.source)}
               </span>
               <p>{message.text}</p>
             </div>
@@ -113,7 +124,7 @@ function BTGlobalTerminal() {
           {isSending && (
             <div className="bt-chat-interface__message bt-chat-interface__message--thinking" aria-live="polite">
               <span className="bt-chat-interface__source bt-chat-interface__source--qiu">
-                QIU
+                {chat.agentName}
               </span>
               <div className="bt-chat-interface__thinking">
                 <strong>{chat.thinkingLabel}</strong>

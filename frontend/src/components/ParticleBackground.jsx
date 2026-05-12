@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import avatarImageSrc from '../../static_res/vvictor.png'
 
 const codePool = [
   '{', '}', '[', ']', '(', ')', '<', '>', '/', '*', ';', ':', '"', "'",
@@ -196,16 +197,25 @@ function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
       tempCanvas.width = avatarSize
       tempCanvas.height = avatarSize
 
-      tempCtx.fillStyle = '#f5f2eb'
-      tempCtx.fillRect(0, 0, avatarSize, avatarSize)
+      tempCtx.clearRect(0, 0, avatarSize, avatarSize)
 
-      const scale = Math.min(avatarSize / img.width, avatarSize / img.height)
-      const drawW = img.width * scale
-      const drawH = img.height * scale
-      const drawX = (avatarSize - drawW) / 2
-      const drawY = (avatarSize - drawH) / 2
+      const cropSize = Math.min(img.width * 0.72, img.height * 0.58)
+      const focalX = img.width * 0.5
+      const focalY = img.height * 0.42
+      const sourceX = Math.max(0, Math.min(img.width - cropSize, focalX - cropSize / 2))
+      const sourceY = Math.max(0, Math.min(img.height - cropSize, focalY - cropSize / 2))
 
-      tempCtx.drawImage(img, drawX, drawY, drawW, drawH)
+      tempCtx.drawImage(
+        img,
+        sourceX,
+        sourceY,
+        cropSize,
+        cropSize,
+        0,
+        0,
+        avatarSize,
+        avatarSize
+      )
 
       const imageData = tempCtx.getImageData(0, 0, avatarSize, avatarSize)
       const data = imageData.data
@@ -220,6 +230,13 @@ function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
       const centerX = avatarCenter.x
       const centerY = avatarCenter.y
 
+      const getBrightness = (x, y) => {
+        const clampedX = Math.max(0, Math.min(avatarSize - 1, x))
+        const clampedY = Math.max(0, Math.min(avatarSize - 1, y))
+        const i = (clampedY * avatarSize + clampedX) * 4
+        return (data[i] + data[i + 1] + data[i + 2]) / 3
+      }
+
       for (let y = 0; y < avatarSize; y += spacing) {
         for (let x = 0; x < avatarSize; x += spacing) {
           const i = (y * avatarSize + x) * 4
@@ -230,11 +247,23 @@ function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
 
           if (a > 128) {
             const brightness = (r + g + b) / 3
-            const contrast = brightness < 128 ? 0 : 180
+            const rightBrightness = getBrightness(x + spacing, y)
+            const lowerBrightness = getBrightness(x, y + spacing)
+            const edgeStrength = Math.abs(brightness - rightBrightness) + Math.abs(brightness - lowerBrightness)
+            const centerOffsetX = (x - avatarSize / 2) / (avatarSize / 2)
+            const centerOffsetY = (y - avatarSize / 2) / (avatarSize / 2)
+            const withinAvatarMask = centerOffsetX * centerOffsetX + centerOffsetY * centerOffsetY < 0.98
+            const isFigurePixel = brightness < 188 || edgeStrength > 18
+            const isHighlightDetail = brightness < 224 && edgeStrength > 8 && Math.random() > 0.45
+
+            if (!withinAvatarMask || (!isFigurePixel && !isHighlightDetail)) continue
+
+            const contrasted = (brightness - 128) * 1.55 + 128
+            const tone = Math.max(0, Math.min(245, Math.round(contrasted - edgeStrength * 0.5)))
             particles.push(new Particle(
               centerX - avatarSize / 2 + x,
               centerY - avatarSize / 2 + y,
-              `rgb(${contrast}, ${contrast}, ${contrast})`
+              `rgb(${tone}, ${tone}, ${tone})`
             ))
           }
         }
@@ -358,7 +387,7 @@ function ParticleBackground({ mousePos, hideAtRef, onDisperseChange }) {
       />
       <img
         ref={imageRef}
-        src={`${import.meta.env.BASE_URL}images/vvictor.png`}
+        src={avatarImageSrc}
         style={{ display: 'none' }}
         alt=""
       />

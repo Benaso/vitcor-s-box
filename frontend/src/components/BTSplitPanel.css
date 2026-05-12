@@ -87,14 +87,17 @@
 
 /* Tooltip bubble */
 .bt-floating-panel__handle::after {
-  content: '\6254\5230\8FB9\7F18 \2192';
+  content: '\79CB\003E\0020\62D6\6211\5230\5C4F\5E55\8FB9\7F18\5427\FF0C\5BF9\8BDD\4F1A\5728\90A3\91CC\5C55\5F00\3002';
   position: absolute;
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
   padding: 4px 10px;
-  white-space: nowrap;
+  width: max-content;
+  max-width: min(220px, calc(100vw - 32px));
+  white-space: normal;
   font-size: 10px;
+  line-height: 1.45;
   font-weight: normal;
   font-family: 'Courier New', Consolas, monospace;
   color: var(--color-bg);
@@ -110,6 +113,58 @@
 
 .bt-floating-panel__handle.is-dragging::after {
   opacity: 0;
+}
+
+.bt-floating-panel__handle.has-route-bubble::after {
+  opacity: 0;
+}
+
+.bt-floating-panel__speech {
+  position: absolute;
+  right: calc(100% + 12px);
+  bottom: calc(100% - 8px);
+  width: max-content;
+  max-width: min(220px, calc(100vw - 88px));
+  padding: 8px 10px;
+  color: var(--color-text);
+  background: #fff;
+  border: 2px solid var(--color-border);
+  box-shadow: 3px 3px 0 var(--color-border);
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  white-space: pre-line;
+  text-align: left;
+  pointer-events: none;
+  animation: route-bubble-pop 3600ms steps(1, end) forwards;
+}
+
+.bt-floating-panel__speech::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  bottom: 10px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-right: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
+  transform: rotate(-45deg);
+  box-shadow: 2px 2px 0 var(--color-border);
+}
+
+@keyframes route-bubble-pop {
+  0% {
+    opacity: 0;
+  }
+
+  8%, 82% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 /* ===== Panel (shared) ===== */
@@ -324,6 +379,21 @@
 
 /* ===== Mobile ===== */
 @media (max-width: 767px) {
+  .bt-floating-panel__speech {
+    right: auto;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    max-width: min(240px, calc(100vw - 32px));
+    transform: translateX(-50%);
+  }
+
+  .bt-floating-panel__speech::after {
+    right: auto;
+    left: 50%;
+    bottom: -8px;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
   .bt-floating-panel__panel--bottom,
   .bt-floating-panel__panel--top {
     height: 50vh;

@@ -28,6 +28,7 @@ function getInitialLanguage() {
 
   const browserLanguage = window.navigator.language.toLowerCase()
   if (browserLanguage.startsWith('de')) return 'de'
+  if (browserLanguage.startsWith('ja')) return 'ja'
   if (browserLanguage.startsWith('zh')) return 'zh'
   return 'en'
 }

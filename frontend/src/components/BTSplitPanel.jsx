@@ -6,13 +6,63 @@ import { useLanguage } from '../i18n/LanguageContext'
 import BTBootSequence from './BTBootSequence'
 import BTGlobalTerminal from './BTGlobalTerminal'
 import './BTSplitPanel.css'
+import qiuSprite1 from '../../static_res/qiu1.png'
+import qiuSprite2 from '../../static_res/qiu2.png'
+import qiuSprite3 from '../../static_res/qiu3.png'
+import qiuSprite4 from '../../static_res/qiu4.png'
 
-const FRICTION = 0.92
-const VELOCITY_THRESHOLD = 50
+const FRICTION = 0.94
+const VELOCITY_THRESHOLD = 35
 const SAMPLE_SIZE = 5
 const DOCK_ZONE_SIZE = 60
+const BUBBLE_VISIBLE_MS = 3600
 
-const PIXEL_ROBOT_SRC = `${import.meta.env.BASE_URL}images/pixel-art.png`
+const qiuSprites = [qiuSprite1, qiuSprite2, qiuSprite3, qiuSprite4]
+
+function getRandomSpriteIndex(currentIndex = -1) {
+  if (qiuSprites.length <= 1) return 0
+
+  let nextIndex = Math.floor(Math.random() * qiuSprites.length)
+  while (nextIndex === currentIndex) {
+    nextIndex = Math.floor(Math.random() * qiuSprites.length)
+  }
+
+  return nextIndex
+}
+
+function getRouteGreeting(t, language) {
+  const greetings = t.chat?.routeGreetings ?? t.chat?.routeGreeting
+  const list = Array.isArray(greetings) ? greetings : [greetings].filter(Boolean)
+
+  if (list.length > 0) {
+    return list[Math.floor(Math.random() * list.length)]
+  }
+
+  if (language === 'zh') {
+    const fallbackGreetings = [
+      '秋> 你翻到新的一页了。\n我在这里。',
+      '秋> 风从像素缝隙里吹过。\n这一页也醒了。',
+      '秋> 地图展开了一格。\n要继续往前吗？'
+    ]
+    return fallbackGreetings[Math.floor(Math.random() * fallbackGreetings.length)]
+  }
+
+  if (language === 'ja') {
+    const fallbackGreetings = [
+      '秋> 新しいページだね。\nここにいるよ。',
+      '秋> 画面が少し光った。\n次の場面へ行こう。',
+      '秋> 地図が一マス開いたよ。\n進んでみる？'
+    ]
+    return fallbackGreetings[Math.floor(Math.random() * fallbackGreetings.length)]
+  }
+
+  const fallbackGreetings = [
+    'QIU> new page loaded.\nI am right here.',
+    'QIU> the map opens one tile.\nShall we continue?',
+    'QIU> the screen flickers softly.\nThis scene is ready.'
+  ]
+  return fallbackGreetings[Math.floor(Math.random() * fallbackGreetings.length)]
+}
 
 function isInDockZone(x, y, vw, vh) {
   const mobile = vw < 768
@@ -33,6 +83,7 @@ function useDraggableHandle({ onSnap }) {
   const [isDragging, setIsDragging] = useState(false)
   const [renderTick, setRenderTick] = useState(0)
   const samples = useRef([])
+  const lastVelocity = useRef({ x: 0, y: 0 })
   const pointerId = useRef(null)
   const animRef = useRef(null)
   const onSnapRef = useRef(onSnap)
@@ -125,7 +176,8 @@ function useDraggableHandle({ onSnap }) {
     e.preventDefault()
     pointerId.current = e.pointerId
     e.currentTarget.setPointerCapture(e.pointerId)
-    samples.current = [{ x: e.clientX, y: e.clientY, t: Date.now() }]
+    samples.current = [{ x: e.clientX, y: e.clientY, t: performance.now() }]
+    lastVelocity.current = { x: 0, y: 0 }
     hoveredZone.current = null
     setIsDragging(true)
     if (animRef.current) {
@@ -141,9 +193,25 @@ function useDraggableHandle({ onSnap }) {
       x: clamp(e.clientX, hw, window.innerWidth - hw),
       y: clamp(e.clientY, hh, window.innerHeight - hh)
     }
+    const now = performance.now()
+    const previous = samples.current[samples.current.length - 1]
+
+    if (previous) {
+      const dt = Math.max((now - previous.t) / 1000, 0.001)
+      const nextVelocity = {
+        x: (e.clientX - previous.x) / dt,
+        y: (e.clientY - previous.y) / dt
+      }
+
+      lastVelocity.current = {
+        x: lastVelocity.current.x * 0.35 + nextVelocity.x * 0.65,
+        y: lastVelocity.current.y * 0.35 + nextVelocity.y * 0.65
+      }
+    }
+
     pos.current = clamped
     hoveredZone.current = isInDockZone(e.clientX, e.clientY, window.innerWidth, window.innerHeight)
-    samples.current.push({ x: e.clientX, y: e.clientY, t: Date.now() })
+    samples.current.push({ x: e.clientX, y: e.clientY, t: now })
     if (samples.current.length > SAMPLE_SIZE) samples.current.shift()
     forceRender()
   }, [getHandleHalf, forceRender])
@@ -160,17 +228,22 @@ function useDraggableHandle({ onSnap }) {
       return
     }
 
-    const first = s[0]
-    const last = s[s.length - 1]
+    const recent = s.slice(-3)
+    const first = recent[0]
+    const last = recent[recent.length - 1]
     const dt = (last.t - first.t) / 1000
-    if (dt < 0.01) {
-      hoveredZone.current = null
-      forceRender()
-      return
-    }
-
-    const vx = (last.x - first.x) / dt
-    const vy = (last.y - first.y) / dt
+    const sampledVelocity = dt >= 0.01
+      ? {
+          x: (last.x - first.x) / dt,
+          y: (last.y - first.y) / dt
+        }
+      : lastVelocity.current
+    const vx = Math.abs(lastVelocity.current.x) > Math.abs(sampledVelocity.x)
+      ? lastVelocity.current.x
+      : sampledVelocity.x
+    const vy = Math.abs(lastVelocity.current.y) > Math.abs(sampledVelocity.y)
+      ? lastVelocity.current.y
+      : sampledVelocity.y
     const vw = window.innerWidth
     const vh = window.innerHeight
 
@@ -240,7 +313,7 @@ function DockZones({ hoveredZone }) {
 
 function BTSplitPanel() {
   const { hasEverRevealed, isAvatarRevealed } = useAvatarReveal()
-  const { t } = useLanguage()
+  const { language, t } = useLanguage()
   const location = useLocation()
   const {
     closeBTTerminal,
@@ -251,12 +324,19 @@ function BTSplitPanel() {
   } = useBTTerminal()
   const [showChat, setShowChat] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [spriteIndex, setSpriteIndex] = useState(() => getRandomSpriteIndex())
+  const [showRouteBubble, setShowRouteBubble] = useState(false)
+  const [routeGreeting, setRouteGreeting] = useState(() => getRouteGreeting(t, language))
   const refreshTimerRef = useRef(null)
+  const routeBubbleTimerRef = useRef(null)
   const bootDoneRef = useRef(false)
   const prevShouldShow = useRef(false)
 
   useEffect(() => {
-    return () => clearTimeout(refreshTimerRef.current)
+    return () => {
+      clearTimeout(refreshTimerRef.current)
+      clearTimeout(routeBubbleTimerRef.current)
+    }
   }, [])
 
   const handleBootComplete = useCallback(() => {
@@ -350,9 +430,26 @@ function BTSplitPanel() {
       } else {
         setInitialPos(window.innerWidth / 2, window.innerHeight / 2)
       }
+
+      setShowRouteBubble(true)
+      clearTimeout(routeBubbleTimerRef.current)
+      routeBubbleTimerRef.current = setTimeout(() => {
+        setShowRouteBubble(false)
+      }, BUBBLE_VISIBLE_MS)
     }
     prevShouldShow.current = shouldShowPanel
   }, [shouldShowPanel, setInitialPos])
+
+  useEffect(() => {
+    setSpriteIndex((currentIndex) => getRandomSpriteIndex(currentIndex))
+    setRouteGreeting(getRouteGreeting(t, language))
+    setShowRouteBubble(true)
+
+    clearTimeout(routeBubbleTimerRef.current)
+    routeBubbleTimerRef.current = setTimeout(() => {
+      setShowRouteBubble(false)
+    }, BUBBLE_VISIBLE_MS)
+  }, [location.pathname, language, t])
 
   if (!shouldShowPanel) return null
 
@@ -367,17 +464,23 @@ function BTSplitPanel() {
       {showHandle && (
         <div
           ref={handleRef}
-          className={`bt-floating-panel__handle${isDragging ? ' is-dragging' : ''}`}
+          className={`bt-floating-panel__handle${isDragging ? ' is-dragging' : ''}${showRouteBubble ? ' has-route-bubble' : ''}`}
           style={{
             transform: `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`
           }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
         >
+          {showRouteBubble && !isDragging && (
+            <div className="bt-floating-panel__speech" aria-live="polite">
+              {routeGreeting}
+            </div>
+          )}
           <img
             className="bt-floating-panel__sprite"
-            src={PIXEL_ROBOT_SRC}
+            src={qiuSprites[spriteIndex]}
             alt=""
             draggable={false}
           />
@@ -410,7 +513,7 @@ function BTSplitPanel() {
             {!showChat ? (
               <BTBootSequence onComplete={handleBootComplete} />
             ) : (
-              <BTGlobalTerminal />
+              <BTGlobalTerminal portraitSrc={qiuSprites[spriteIndex]} />
             )}
             {isRefreshing && <div className="bt-shell-panel__refresh" aria-hidden="true" />}
           </div>

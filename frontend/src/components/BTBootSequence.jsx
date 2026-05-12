@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 
 const defaultChat = {
-  title: 'qiu boot',
+  title: 'qiu',
   path: '/retro-dialogue',
   notices: ['GUEST: QIU', 'MODE: 8-BIT DIALOGUE', 'DISPLAY: TTY0'],
   bootAria: 'qiu virtual machine boot sequence',

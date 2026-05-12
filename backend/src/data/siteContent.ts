@@ -2,9 +2,10 @@ const terminalLine = 'choose life, choose a job, choose a family...'
 
 export const siteContent = {
   languages: [
-    { code: 'zh', label: '中' },
+    { code: 'zh', label: 'ZH' },
     { code: 'en', label: 'EN' },
-    { code: 'de', label: 'DE' }
+    { code: 'de', label: 'DE' },
+    { code: 'ja', label: 'JA' }
   ],
   translations: {
     en: {
