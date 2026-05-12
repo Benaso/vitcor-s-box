@@ -41,3 +41,27 @@ export function postQiuMessage(message, history) {
     body: JSON.stringify({ message, history })
   })
 }
+
+export async function fetchProjects() {
+  return fetchApi('/projects')
+}
+
+export async function fetchProject(id) {
+  return fetchApi(`/projects/${id}`)
+}
+
+export async function runSandbox(projectId) {
+  return fetchApi(`/projects/${projectId}/run`, { method: 'POST' })
+}
+
+export async function stopSandbox(projectId) {
+  return fetchApi(`/projects/${projectId}/stop`, { method: 'POST' })
+}
+
+export async function fetchSandboxStatus(projectId) {
+  return fetchApi(`/projects/${projectId}/status`)
+}
+
+export async function fetchSandboxStats() {
+  return fetchApi('/sandbox/stats')
+}
